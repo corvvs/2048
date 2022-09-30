@@ -6,9 +6,13 @@
 
 // ブロック
 typedef struct s_block {
+	// ブロックの持っている数(スコア)
 	unsigned long long	score;
+	// ブロックの縦位置
 	unsigned int		row;
+	// ブロックの横位置
 	unsigned int		col;
+	// 合体フラグ
 	bool				has_united;
 }	t_block;
 
@@ -44,7 +48,9 @@ typedef struct s_game_attribute {
 typedef struct t_game_state {
 	//　盤面
 	t_board				current_board;
+	// 現在の状態で移動(上下左右4方向)操作をした時の、移動可否と結果
 	t_movement_result	movement_results[4];
+	// 現在のスコア
 	unsigned long long	score;
 }	t_game_state;
 
