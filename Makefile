@@ -4,7 +4,8 @@ B_NAME	:=
 CC		:= cc
 CFLAGS	:= -Wall -Werror -Wextra -MMD -MP
 IOPTS	= $(addprefix -I , $(INCLUDES))
-LOPTS	= $(addprefix -L , $(INCLUDES))
+# LOPTS	= $(addprefix -L , $(INCLUDES))
+LIBS	= -lncurses
 
 SRCDIR	:= .
 OBJDIR	:= ./obj
@@ -26,7 +27,7 @@ $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) $(IOPTS) -c $< -o $@
 
 $(NAME)	: $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(IOPTS) $(OBJS) $(LIBFT) -o $@
+	$(CC) $(CFLAGS) $(IOPTS) $(OBJS) $(LIBS) -o $@
 
 $(LIBFT): _libft
 
