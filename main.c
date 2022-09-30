@@ -8,6 +8,7 @@ void init_ncurses()
 	timeout(-1);
 	noecho();
 	curs_set(0);
+	keypad(stdscr, TRUE);
 }
 
 int main()
@@ -15,7 +16,8 @@ int main()
 	init_ncurses();
 	while (true) {
 		int c = getch();
-		printw("[%c]", c);
+		flushinp();
+		printw("[%d]", c);
 	}
 	endwin();
 }
