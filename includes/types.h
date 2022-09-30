@@ -46,6 +46,12 @@ typedef struct s_game_attribute {
 // ゲームの状態
 // ゲーム開始時に初期化されるが, その後も変化する.
 typedef struct t_game_state {
+	// 勝利フラグ
+	// 勝利した後でもゲームは続行できる
+	bool				has_won;
+	// 敗北フラグ
+	// 敗北した後はゲームは続行できない
+	bool				has_lose;
 	//　盤面
 	t_board				current_board;
 	// 現在の状態で移動(上下左右4方向)操作をした時の、移動可否と結果
