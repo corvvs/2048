@@ -1,0 +1,61 @@
+##############
+# Test rules #
+##############
+TESTER			 := tester
+TESTDIR			 := unit-test
+GTESTDIR		 := $(TESTDIR)/googletest
+GTESTLIB		 := $(GTESTDIR)/gtest.a
+GTEST_INCLUDES	 := -I$(GTESTDIR)/gtest $(INCLUDES) -I $(TESTDIR)
+GTEST_FLAGS		 := -fsanitize=address -std=c++11
+GTEST_LIBS		 := -lpthread
+
+TARGET_OBJDIR	  = ./obj-cpp/
+BUILDDIR		  = ./obj-cpp/
+TARGET_OBJDIRS	  = $(SRCDIRS:$(SRCDIR)%=$(TARGET_OBJDIR)%)
+TARGET_OBJS		  = $(SRCS:$(SRCDIR)%.c=$(TARGET_OBJDIR)%.o)
+TEST_TARGET		 := 2048.a
+
+TESTCASE_DIR	 := $(TESTDIR)/testcases
+TESTCASE_DIRS	  = $(shell find $(TESTCASE_DIR) -type d)
+TESTCASE_SRCS	  = $(shell find $(TESTCASE_DIR) -name '*test.cpp')
+TESTCASE_OBJS	  = $(TESTCASE_SRCS:%.cpp=$(BUILDDIR)%.o)
+TESTCASE_OBJDIRS  = $(TESTCASE_DIRS:%=$(BUILDDIR)%)
+TESTCASE_DEPS	  = $(TESTCASE_SRCS:%.cpp=$(BUILDDIR)%.d)
+.PHONY: $(TESTCASE_DEPS)
+
+$(GTESTLIB)	:
+	$(MAKE) -C $(TESTDIR)
+
+$(TESTCASE_OBJDIRS):
+	@mkdir -p $@
+
+$(BUILDDIR)$(TESTDIR)/%.o: $(TESTDIR)/%.cpp
+	@printf "$(PURPLE)$(ITALIC)"
+	$(CXX) $(GTEST_FLAGS) $(GTEST_INCLUDES) -MMD -MP -c $< -o $@
+	@printf "$(END)"
+
+$(TEST_TARGET): $(TARGET_OBJDIRS) $(TARGET_OBJS)
+	@ar -rcs $@ $(TARGET_OBJS)
+
+$(TESTER)	: $(GTESTLIB) $(TEST_TARGET) $(TESTCASE_OBJDIRS) $(TESTCASE_OBJS)
+	clang++ $(GTEST_FLAGS) $(GTEST_INCLUDES) $(TESTDIR)/operator.cpp $(GTESTLIB) $(TESTCASE_OBJS) $(TEST_TARGET) $(GTEST_LIBS) -o $@
+	@$(RM) $(TEST_TARGET)
+
+GTEST_OPT	:= $(subst $() ,*:*,$(filter-out gtest,$(MAKECMDGOALS)))
+gtest		: cpp $(TESTER) FORCE
+	./$(TESTER) --gtest_filter='*$(GTEST_OPT)*' || ($(MAKE) check; ! :)
+	@$(MAKE) check
+
+check:
+	@printf "$(RED)$(BOLD)\n"
+	@WARN_FILE=$$(find $(TESTCASE_DIR) -type f | grep -v '_test\.cpp') \
+		&& printf "Some files are not included.\n$(END)$(RED)%s\n" $$WARN_FILE \
+		||:
+	@printf "$(END)"
+
+test-fclean:
+	rm -rf $(TESTER) $(TARGET_OBJDIR) $(TEST_TARGET)
+
+%:;@:
+
+-include $(TESTCASE_DEPS)

@@ -1,0 +1,14 @@
+*
+
+!.gitignore
+!**/
+!*.c
+!*.h
+!*.mk
+!*.clang-format
+!Makefile
+!README.md
+!*.cpp
+!*.hpp
+
+unit-test/googletest
