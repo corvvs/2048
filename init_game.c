@@ -4,13 +4,18 @@
 void init_game(t_game *game, unsigned int random_seed, size_t game_width, size_t game_height)
 {
 	*game = (t_game){
-		.random_seed      = random_seed,
-		.board_height     = game_height,
-		.board_width      = game_width,
-		.has_won          = false,
-		.has_lose         = false,
-		.score            = 0,
-		.current_board    = {},
+		.random_seed  = random_seed,
+		.board_height = game_height,
+		.board_width  = game_width,
+		.has_won      = false,
+		.has_lose     = false,
+		.score        = 0,
+		.current_board =
+			{
+				.board_height = game_height,
+				.board_width  = game_width,
+				.field        = {},
+			},
 		.movement_results = {},
 	};
 };

@@ -4,7 +4,7 @@ B_NAME	:=
 CXX		:= clang++
 
 CC		:= cc
-CFLAGS	:= -Wall -Werror -Wextra -MMD -MP
+CFLAGS	:= -Wall -Werror -Wextra -MMD -MP -g3 -fsanitize=address -fsanitize=undefined
 
 LIBS	= -lncurses
 
