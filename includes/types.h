@@ -16,10 +16,10 @@ typedef struct s_block {
 	// 値が VACANT_BLOCK ならそこは空きブロック
 	score_type score;
 	// 合体フラグ
-	bool has_united;
+	bool has_unified;
 } t_block;
 
-#define MAX_GAME_SIZE 4
+#define MAX_GAME_SIZE 5
 typedef t_block     t_block_row[MAX_GAME_SIZE];
 typedef t_block_row t_block_array[MAX_GAME_SIZE];
 

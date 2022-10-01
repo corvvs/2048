@@ -3,7 +3,7 @@
 
 bool operator==(const t_block &lhs, const t_block &rhs)
 {
-	return lhs.has_united == rhs.has_united && lhs.score == rhs.score;
+	return lhs.has_unified == rhs.has_unified && lhs.score == rhs.score;
 }
 
 bool operator==(const t_board &lhs, const t_board &rhs)
@@ -60,7 +60,7 @@ bool operator!=(const t_game &lhs, const t_game &rhs)
 
 std::ostream &operator<<(std::ostream &os, const t_block &v)
 {
-	os << "\nscore: " << v.score << "\nhas_united: " << v.has_united;
+	os << "\nscore: " << v.score << "\nhas_united: " << v.has_unified;
 	return os;
 }
 
