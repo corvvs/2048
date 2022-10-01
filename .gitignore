@@ -8,5 +8,6 @@
 !*.clang-format
 !Makefile
 !README.md
+!*.cpp
 
 unit-test/googletest
