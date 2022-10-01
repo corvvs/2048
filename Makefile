@@ -13,37 +13,37 @@ SRCS	:= $(shell find . -maxdepth 1 -type f -name '*.c')
 OBJS	:= $(SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o)
 DEPENDS	:= $(SRCS:$(SRCDIR)%.c=$(OBJDIR)%.d)
 
-# LIBFTDIR	:= ./libft
-# LIBFT		:= $(LIBFTDIR)/libft.a
+INCLUDES	:= -I ./includes
 
-INCLUDES	:= $(LIBFTDIR) ./includes
+.PHONY: all
+all		: $(NAME) FORCE
 
-all		: _libft $(NAME) FORCE
+bonus : CFLAGS += -D BONUS
+# bonus : _libft $(B_NAME)
 
+.PHONY: $(DEPENDS)
 -include $(DEPENDS)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(OBJDIR)/$(*D)
 	$(CC) $(CFLAGS) $(IOPTS) -c $< -o $@
 
-$(NAME)	: $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(IOPTS) $(OBJS) $(LIBS) -o $@
-
-$(LIBFT): _libft
-
-_libft	: FORCE
-# $(MAKE) -C $(LIBFTDIR)
-
-bonus : CFLAGS += -D BONUS
-# bonus : _libft $(B_NAME)
+$(NAME)	: $(OBJS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBS) -o $@
 
 clean: FORCE
-	$(MAKE) $@ -C $(LIBFTDIR)
-	rm -rf $(OBJDIR)
+	rm -rf $(OBJDIR)  ./obj-cpp
 
 fclean: clean
-	$(MAKE) $@ -C $(LIBFTDIR)
-	rm -f $(NAME) $(B_NAME)
+	rm -f $(NAME) $(B_NAME) 2048.a
+
+.PHONY: re
+re: fclean all
 
 .PHONY: FORCE
 FORCE:
+
+cpp:
+	make CC=c++ OBJDIR=./obj-cpp NAME=testfile "CFLAGS=$(CFLAGS) -Wno-deprecated"
+
+-include test.mk

@@ -4,6 +4,9 @@
 !**/
 !*.c
 !*.h
+!*.mk
 !*.clang-format
 !Makefile
 !README.md
+
+unit-test/googletest
