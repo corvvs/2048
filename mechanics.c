@@ -110,6 +110,40 @@ void advance_turn(t_game *game, e_move_direction direction)
 	game->score += score_increment(&selected->board);
 }
 
+static bool is_power_of_2(int n)
+{
+	// nが2冪である <=> nが正かつ立っているビットが1つ
+	if (n <= 0) {
+		return false;
+	}
+	unsigned int u = n;
+	u              = (u & 0x55555555) + (u >> 1 & 0x55555555);
+	u              = (u & 0x33333333) + (u >> 2 & 0x33333333);
+	u              = (u & 0x0f0f0f0f) + (u >> 4 & 0x0f0f0f0f);
+	u              = (u & 0x00ff00ff) + (u >> 8 & 0x00ff00ff);
+	u              = (u & 0x0000ffff) + (u >> 16 & 0x0000ffff);
+	return u == 1;
+}
+
+// 現在勝利状態であるかどうか判定する
+bool is_in_winning(const t_game *game)
+{
+	printf("WI_NVALUE is powrs of 2?: %d\n", is_power_of_2(WIN_VALUE));
+	if (!is_power_of_2(WIN_VALUE)) {
+		return false;
+	}
+	const t_block_array *field = &game->current_board.field;
+	for (size_t i = 0; i < game->board_height; ++i) {
+		for (size_t j = 0; j < game->board_width; ++j) {
+			if ((*field)[i][j].score >= WIN_VALUE) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+// 実行可能な移動があるかどうか判定する
 bool is_slidable(const t_game *game)
 {
 	return game->movement_results[MD_UP].is_slidable ||

@@ -62,6 +62,11 @@ int main()
 // 		printf("[%d-th hand]\n", i);
 // 		spawn_a_block(&game.current_board);
 // 		debug_print_game(&game);
+// 		if (!game.has_won && is_in_winning(&game)) {
+// 			printf("[GREAT!!]\n");
+// 			break;
+// 		}
+// 		game.has_won = true;
 // 		project_next_states(&game);
 // 		if (!is_slidable(&game)) {
 // 			printf("[you lost; no available movement]\n");
