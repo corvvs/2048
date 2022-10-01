@@ -9,11 +9,11 @@ static void erase_block(t_block *b)
 	};
 }
 
-// ブロック *from を *to に移動させる
-void move_block(t_block *from, t_block *to)
+void swap_block(t_block *a, t_block *b)
 {
-	*to = *from;
-	erase_block(from);
+	t_block c = *a;
+	*a        = *b;
+	*b        = c;
 }
 
 // ブロック *erased を *remaining に合体させ, *erased は削除する

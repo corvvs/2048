@@ -2,12 +2,12 @@
 #include "types.h"
 
 // 空きマスのどこかに1つブロックを置く
-void spawn_block(t_board *b)
+void spawn_a_block(t_board *b)
 {
 	size_t positions[MAX_GAME_SIZE * MAX_GAME_SIZE] = {};
 	size_t vacants                                  = 0;
-	for (unsigned int i = 0; i < b->board_height; ++i) {
-		for (unsigned int j = 0; j < b->board_width; ++j) {
+	for (size_t i = 0; i < b->board_height; ++i) {
+		for (size_t j = 0; j < b->board_width; ++j) {
 			if (b->field[i][j].score != VACANT_BLOCK) {
 				continue;
 			}
@@ -36,19 +36,12 @@ static void swap_size_t(size_t *a, size_t *b)
 	*b       = c;
 }
 
-static void swap_block(t_block *a, t_block *b)
-{
-	t_block c = *a;
-	*a        = *b;
-	*b        = c;
-}
-
 // 盤面を左右反転する
 static void flip_board(t_board *board)
 {
-	for (unsigned int i = 0; i < board->board_height; ++i) {
-		for (unsigned int j = 0; j < board->board_width - j - 1; ++j) {
-			unsigned int k = board->board_width - j - 1;
+	for (size_t i = 0; i < board->board_height; ++i) {
+		for (size_t j = 0; j < board->board_width - j - 1; ++j) {
+			size_t k = board->board_width - j - 1;
 			swap_block(&board->field[i][j], &board->field[i][k]);
 		}
 	}
@@ -57,8 +50,8 @@ static void flip_board(t_board *board)
 // 盤面を転置する
 static void transpose_board(t_board *board)
 {
-	for (unsigned int i = 0; i < MAX_GAME_SIZE; ++i) {
-		for (unsigned int j = i + 1; j < MAX_GAME_SIZE; ++j) {
+	for (size_t i = 0; i < MAX_GAME_SIZE; ++i) {
+		for (size_t j = i + 1; j < MAX_GAME_SIZE; ++j) {
 			swap_block(&board->field[i][j], &board->field[j][i]);
 		}
 	}

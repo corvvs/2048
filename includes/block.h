@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-void move_block(t_block *from, t_block *to);
+void swap_block(t_block *a, t_block *b);
 void unify_block(t_block *remaining, t_block *erased);
 
 #endif

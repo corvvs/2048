@@ -57,10 +57,10 @@ int main()
 // 	t_game game;
 // 	init_game(&game, 1000007, 5, 5);
 // 	debug_print_board(&game.current_board);
-// 	spawn_block(&game.current_board);
+// 	spawn_a_block(&game.current_board);
 // 	for (int i = 1;; ++i) {
 // 		printf("[%d-th hand]\n", i);
-// 		spawn_block(&game.current_board);
+// 		spawn_a_block(&game.current_board);
 // 		debug_print_game(&game);
 // 		project_movements(&game);
 // 		if (!is_movable(&game)) {

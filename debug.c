@@ -9,8 +9,8 @@
 void debug_print_board(const t_board *b)
 {
 	printf("[H: %zu, W: %zu]\n", b->board_height, b->board_width);
-	for (unsigned int i = 0; i < b->board_height; ++i) {
-		for (unsigned int j = 0; j < b->board_width; ++j) {
+	for (size_t i = 0; i < b->board_height; ++i) {
+		for (size_t j = 0; j < b->board_width; ++j) {
 			if (b->field[i][j].has_unified) {
 				printf("[%4" UINT64_FMT "]", b->field[i][j].score);
 			} else {

@@ -6,21 +6,22 @@
 
 static bool move_row_left(size_t width, t_block_row *row)
 {
-	unsigned int move_to   = 0;
-	bool         has_moved = false;
-	for (size_t j = 0; j < width; ++j) {
-		if ((*row)[j].score == VACANT_BLOCK) {
+	bool has_moved = false;
+	for (size_t j = 0, move_to = 0; j < width; ++j) {
+		t_block *b = &(*row)[j];
+		if (b->score == VACANT_BLOCK) {
 			continue;
 		}
-		t_block *b = &(*row)[j];
+		// 移動
 		if (move_to < j) {
-			// ブロック b は動かせる
-			// ブロック b を move_to まで移動する
-			move_block(b, &(*row)[move_to]);
+			// ブロック b は動かせるので, ブロック b を move_to まで移動する
+			// ... のだが, 移動先は空のはずなので, 移動ではなくスワップでよい.
+			t_block *dest = &(*row)[move_to];
+			swap_block(b, dest);
 			has_moved = true;
+			b         = dest;
 		}
-		b = &(*row)[move_to];
-		// b の手前にマスはあるか？
+		// 合体
 		if (move_to == 0) {
 			move_to += 1;
 			continue;
@@ -39,11 +40,11 @@ static bool move_row_left(size_t width, t_block_row *row)
 
 static bool move_left(t_movement_result *result)
 {
-	bool has_moved = false;
-	for (size_t i = 0; i < result->board.board_height; ++i) {
-		const bool row_has_moved =
-			move_row_left(result->board.board_width, &(result->board.field[i]));
-		has_moved = has_moved || row_has_moved;
+	t_board *board     = &result->board;
+	bool     has_moved = false;
+	for (size_t i = 0; i < board->board_height; ++i) {
+		const bool row_has_moved = move_row_left(board->board_width, &(board->field[i]));
+		has_moved                = has_moved || row_has_moved;
 	}
 	return has_moved;
 }
@@ -60,6 +61,7 @@ static void clear_unified_flags(t_board *board)
 static void
 project_movement(const t_board *current, e_move_direction direction, t_movement_result *result)
 {
+	printf("dir: %d\n", direction);
 	*result = (t_movement_result){
 		.is_movable = false,
 		.board      = *current,
@@ -74,6 +76,7 @@ project_movement(const t_board *current, e_move_direction direction, t_movement_
 	rotate_back_from_cannonical(&result->board, direction);
 }
 
+// 現在の状態から4通りの移動をした結果を計算し, 結果を控えておく
 void project_movements(t_game *game)
 {
 	e_move_direction dirs[]        = {MD_UP, MD_RIGHT, MD_DOWN, MD_LEFT};
