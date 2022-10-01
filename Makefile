@@ -1,10 +1,11 @@
 NAME	:= 2048
 B_NAME	:= 
 
+CXX		:= clang++
+
 CC		:= cc
 CFLAGS	:= -Wall -Werror -Wextra -MMD -MP
-IOPTS	= $(addprefix -I , $(INCLUDES))
-# LOPTS	= $(addprefix -L , $(INCLUDES))
+
 LIBS	= -lncurses
 
 SRCDIR	:= .
@@ -26,7 +27,7 @@ bonus : CFLAGS += -D BONUS
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(OBJDIR)/$(*D)
-	$(CC) $(CFLAGS) $(IOPTS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME)	: $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBS) -o $@
