@@ -5,7 +5,7 @@ TESTER			 := tester
 TESTDIR			 := unit-test
 GTESTDIR		 := $(TESTDIR)/googletest
 GTESTLIB		 := $(GTESTDIR)/gtest.a
-GTEST_INCLUDES	 := -I$(GTESTDIR)/gtest $(INCLUDES)
+GTEST_INCLUDES	 := -I$(GTESTDIR)/gtest $(INCLUDES) -I $(TESTDIR)
 GTEST_FLAGS		 := -fsanitize=address -std=c++11
 GTEST_LIBS		 := -lpthread
 
@@ -38,7 +38,7 @@ $(TEST_TARGET): $(TARGET_OBJDIRS) $(TARGET_OBJS)
 	@ar -rcs $@ $(TARGET_OBJS)
 
 $(TESTER)	: $(GTESTLIB) $(TEST_TARGET) $(TESTCASE_OBJDIRS) $(TESTCASE_OBJS)
-	clang++ $(GTEST_FLAGS) $(GTEST_INCLUDES) $(GTESTLIB) $(TESTCASE_OBJS) $(TEST_TARGET) $(GTEST_LIBS) -o $@
+	clang++ $(GTEST_FLAGS) $(GTEST_INCLUDES) $(TESTDIR)/operator.cpp $(GTESTLIB) $(TESTCASE_OBJS) $(TEST_TARGET) $(GTEST_LIBS) -o $@
 	@$(RM) $(TEST_TARGET)
 
 GTEST_OPT	:= $(subst $() ,*:*,$(filter-out gtest,$(MAKECMDGOALS)))
