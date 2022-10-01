@@ -1,4 +1,4 @@
-#include "includes/types.h"
+#include "types.h"
 
 // game 構造体の初期化
 void init_game(t_game *game, unsigned int random_seed, size_t game_width, size_t game_height)

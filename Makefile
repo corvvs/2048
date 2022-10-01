@@ -16,7 +16,7 @@ DEPENDS	:= $(SRCS:$(SRCDIR)%.c=$(OBJDIR)%.d)
 # LIBFTDIR	:= ./libft
 # LIBFT		:= $(LIBFTDIR)/libft.a
 
-INCLUDES	:= $(LIBFTDIR)
+INCLUDES	:= $(LIBFTDIR) ./includes
 
 all		: _libft $(NAME) FORCE
 

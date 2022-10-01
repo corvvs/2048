@@ -1,9 +1,10 @@
-#include "includes/types.h"
+#include "types.h"
 
-static void swap_size_t(size_t* a, size_t* b) {
+static void swap_size_t(size_t *a, size_t *b)
+{
 	size_t c = *a;
-	*a        = *b;
-	*b        = c;
+	*a       = *b;
+	*b       = c;
 }
 
 static void swap_block(t_block *a, t_block *b)
@@ -13,19 +14,22 @@ static void swap_block(t_block *a, t_block *b)
 	*b        = c;
 }
 
-static void erase_block(t_block *b) {
+static void erase_block(t_block *b)
+{
 	*b = (t_block){
 		.has_united = false,
-		.score = VACANT_BLOCK,
+		.score      = VACANT_BLOCK,
 	};
 }
 
-static void move_block(t_block* from, t_block* to) {
+static void move_block(t_block *from, t_block *to)
+{
 	*to = *from;
 	erase_block(from);
 }
 
-static void unify_block(t_block* remaining, t_block* erased) {
+static void unify_block(t_block *remaining, t_block *erased)
+{
 	remaining->score += erased->score;
 	remaining->has_united = true;
 	erase_block(erased);
@@ -80,11 +84,9 @@ static void rotate_to_cannonical(t_board *board, e_move_direction direction)
 // rotate_to_cannonical の逆操作をする.
 static void rotate_back_from_cannonical(t_board *board, e_move_direction direction)
 {
-	// 転置と反転はいずれも自分自身が逆操作になるので, この関数では転置と反転をする順序にだけ気をつければよい.
-	// left:  なにもしない
-	// right: 左右反転する
-	// up:    転置する
-	// down:  左右反転して転置する; 順序に注意
+	// 転置と反転はいずれも自分自身が逆操作になるので,
+	// この関数では転置と反転をする順序にだけ気をつければよい. left:  なにもしない right:
+	// 左右反転する up:    転置する down:  左右反転して転置する; 順序に注意
 	switch (direction) {
 	case MD_LEFT:
 		break;
@@ -101,10 +103,11 @@ static void rotate_back_from_cannonical(t_board *board, e_move_direction directi
 	}
 }
 
-static bool move_row_left(size_t width, t_block_row* row) {
-	unsigned int j = 0;
-	unsigned int move_to = 0;
-	bool has_moved = false;
+static bool move_row_left(size_t width, t_block_row *row)
+{
+	unsigned int j         = 0;
+	unsigned int move_to   = 0;
+	bool         has_moved = false;
 	while (j < width) {
 		if (row[j]->score == VACANT_BLOCK) {
 			continue;
@@ -118,12 +121,12 @@ static bool move_row_left(size_t width, t_block_row* row) {
 		// ブロック b を move_to まで移動する
 		move_block(b, &(*row)[move_to]);
 		has_moved = true;
-		b = &(*row)[move_to];
+		b         = &(*row)[move_to];
 		// b の手前にマスはあるか？
 		if (move_to == 0) {
 			continue;
 		}
-		t_block *remaining = &(*row)[move_to - 1];
+		t_block   *remaining    = &(*row)[move_to - 1];
 		const bool is_unifiable = (remaining->score == b->score && !remaining->has_united);
 		if (!is_unifiable) {
 			continue;
@@ -133,10 +136,12 @@ static bool move_row_left(size_t width, t_block_row* row) {
 	return has_moved;
 }
 
-static bool move_left(t_movement_result* result) {
+static bool move_left(t_movement_result *result)
+{
 	bool has_moved = false;
 	for (unsigned int i = 0; i < MAX_GAME_SIZE; ++i) {
-		const bool row_has_moved = move_row_left(result->board.board_width, &(result->board.field[i]));
+		const bool row_has_moved =
+			move_row_left(result->board.board_width, &(result->board.field[i]));
 		has_moved = has_moved || row_has_moved;
 	}
 	return has_moved;
@@ -146,7 +151,7 @@ static void
 project_movement(const t_board *current, e_move_direction direction, t_movement_result *result)
 {
 	result->is_movable = false;
-	result->board = *current;
+	result->board      = *current;
 	// 盤面を左に移動する向きに回す
 	rotate_to_cannonical(&result->board, direction);
 	// 左移動として移動結果を算出
