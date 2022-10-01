@@ -3,6 +3,7 @@
 
 #include "display.h"
 #include "game.h"
+#include "mechanics.h"
 #include "types.h"
 
 // エラーハンドリング
@@ -27,6 +28,7 @@ int main()
 		flushinp();
 		if (c == KEY_RESIZE) {
 		}
+		spawn_block(&g.current_board);
 		refresh_screen(&g, w);
 		// printw("€\n");
 		// printw("[%d]", c);
