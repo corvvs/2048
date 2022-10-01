@@ -6,7 +6,7 @@
 
 static bool move_row_left(size_t width, t_block_row *row)
 {
-	bool has_moved = false;
+	bool has_updated = false;
 	for (size_t j = 0, move_to = 0; j < width; ++j) {
 		t_block *b = &(*row)[j];
 		if (b->score == VACANT_BLOCK) {
@@ -18,8 +18,8 @@ static bool move_row_left(size_t width, t_block_row *row)
 			// ... のだが, 移動先は空のはずなので, 移動ではなくスワップでよい.
 			t_block *dest = &(*row)[move_to];
 			swap_block(b, dest);
-			has_moved = true;
-			b         = dest;
+			has_updated = true;
+			b           = dest;
 		}
 		// 合体
 		if (move_to == 0) {
@@ -33,20 +33,20 @@ static bool move_row_left(size_t width, t_block_row *row)
 			continue;
 		}
 		unify_block(remaining, b);
-		has_moved = true;
+		has_updated = true;
 	}
-	return has_moved;
+	return has_updated;
 }
 
-static bool move_left(t_movement_result *result)
+static bool slide_toward_left(t_movement_result *result)
 {
-	t_board *board     = &result->board;
-	bool     has_moved = false;
+	t_board *board       = &result->board;
+	bool     has_updated = false;
 	for (size_t i = 0; i < board->board_height; ++i) {
 		const bool row_has_moved = move_row_left(board->board_width, &(board->field[i]));
-		has_moved                = has_moved || row_has_moved;
+		has_updated              = has_updated || row_has_moved;
 	}
-	return has_moved;
+	return has_updated;
 }
 
 static void clear_unified_flags(t_board *board)
@@ -59,31 +59,31 @@ static void clear_unified_flags(t_board *board)
 }
 
 static void
-project_movement(const t_board *current, e_move_direction direction, t_movement_result *result)
+project_slide(const t_board *current, e_move_direction direction, t_movement_result *result)
 {
 	printf("dir: %d\n", direction);
 	*result = (t_movement_result){
-		.is_movable = false,
-		.board      = *current,
+		.is_slidable = false,
+		.board       = *current,
 	};
 	// 合体フラグを全てクリア
 	clear_unified_flags(&result->board);
 	// 盤面を左に移動する向きに回す
-	rotate_to_cannonical(&result->board, direction);
+	rotate_to_canonical(&result->board, direction);
 	// 左移動として移動結果を算出
-	result->is_movable = move_left(result);
+	result->is_slidable = slide_toward_left(result);
 	// 盤面を元の向きに戻す
-	rotate_back_from_cannonical(&result->board, direction);
+	rotate_back_from_canonical(&result->board, direction);
 }
 
 // 現在の状態から4通りの移動をした結果を計算し, 結果を控えておく
-void project_movements(t_game *game)
+void project_next_states(t_game *game)
 {
 	e_move_direction dirs[]        = {MD_UP, MD_RIGHT, MD_DOWN, MD_LEFT};
 	const t_board   *current_board = &game->current_board;
 	for (unsigned int i = 0; i < ARRAY_LEN(dirs, e_move_direction); ++i) {
 		e_move_direction dir = dirs[i];
-		project_movement(current_board, dir, &game->movement_results[dir]);
+		project_slide(current_board, dir, &game->movement_results[dir]);
 	}
 }
 
@@ -102,17 +102,18 @@ static score_type score_increment(const t_board *board)
 	return increment;
 }
 
-// 移動予測から1つ選んで, それを現在の状態とする.
-void progress(t_game *game, e_move_direction direction)
+// 移動予測から(可能な)1つ選んで, 次のターンに進む
+void advance_turn(t_game *game, e_move_direction direction)
 {
 	t_movement_result *selected = &game->movement_results[direction];
 	game->current_board         = selected->board;
 	game->score += score_increment(&selected->board);
 }
 
-bool is_movable(const t_game *game)
+bool is_slidable(const t_game *game)
 {
-	return game->movement_results[MD_UP].is_movable ||
-		   game->movement_results[MD_RIGHT].is_movable ||
-		   game->movement_results[MD_DOWN].is_movable || game->movement_results[MD_LEFT].is_movable;
+	return game->movement_results[MD_UP].is_slidable ||
+		   game->movement_results[MD_RIGHT].is_slidable ||
+		   game->movement_results[MD_DOWN].is_slidable ||
+		   game->movement_results[MD_LEFT].is_slidable;
 }

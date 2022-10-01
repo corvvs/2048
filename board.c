@@ -59,9 +59,9 @@ static void transpose_board(t_board *board)
 	swap_size_t(&board->board_height, &board->board_width);
 }
 
-void rotate_to_cannonical(t_board *board, e_move_direction direction)
+void rotate_to_canonical(t_board *board, e_move_direction direction)
 {
-	// cannonical: 左に向かって移動する
+	// canonical: 左に向かって移動する
 	// left:  なにもしない
 	// right: 左右反転する
 	// up:    転置する
@@ -82,8 +82,8 @@ void rotate_to_cannonical(t_board *board, e_move_direction direction)
 	}
 }
 
-// rotate_to_cannonical の逆操作をする.
-void rotate_back_from_cannonical(t_board *board, e_move_direction direction)
+// rotate_to_canonical の逆操作をする.
+void rotate_back_from_canonical(t_board *board, e_move_direction direction)
 {
 	// 転置と反転はいずれも自分自身が逆操作になるので,
 	// この関数では転置と反転をする順序にだけ気をつければよい. left:  なにもしない right:

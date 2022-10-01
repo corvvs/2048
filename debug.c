@@ -23,7 +23,7 @@ void debug_print_board(const t_board *b)
 
 void debug_print_result(const t_movement_result *r)
 {
-	printf("movable?: %s\n", r->is_movable ? "Y" : "n");
+	printf("movable?: %s\n", r->is_slidable ? "Y" : "n");
 	debug_print_board(&r->board);
 }
 

@@ -32,9 +32,9 @@ typedef struct s_board {
 // 移動結果
 typedef struct s_movement_result {
 	// 移動が可能かどうか
-	bool is_movable;
+	bool is_slidable;
 	// 移動した結果
-	// (is_movable == false の時の内容には意味がない)
+	// (is_slidable == false の時の内容には意味がない)
 	t_board board;
 	// 移動により増えたスコアは,
 	// 「board 上の合体フラグがついているブロックの score の総和」
@@ -48,6 +48,10 @@ typedef enum {
 	MD_DOWN  = 2,
 	MD_LEFT  = 3,
 } e_move_direction;
+
+enum e_const {
+	WIN_VALUE = 2048,
+};
 
 // ゲームのパラメータ
 // ゲーム開始時に設定され, 以後固定される

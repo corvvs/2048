@@ -46,10 +46,10 @@ int main()
 // 	}
 // }
 
-// #include "game.h"
-// #include "mechanics.h"
 // #include "board.h"
 // #include "debug.h"
+// #include "game.h"
+// #include "mechanics.h"
 // #include <unistd.h>
 
 // int main()
@@ -62,8 +62,8 @@ int main()
 // 		printf("[%d-th hand]\n", i);
 // 		spawn_a_block(&game.current_board);
 // 		debug_print_game(&game);
-// 		project_movements(&game);
-// 		if (!is_movable(&game)) {
+// 		project_next_states(&game);
+// 		if (!is_slidable(&game)) {
 // 			printf("[you lost; no available movement]\n");
 // 			break;
 // 		}
@@ -76,13 +76,13 @@ int main()
 // 			int d = m - '0';
 // 			if (0 <= d && d < 4) {
 // 				dir = dirs[d];
-// 				if (game.movement_results[dir].is_movable) {
+// 				if (game.movement_results[dir].is_slidable) {
 // 					break;
 // 				}
 // 			}
 // 		}
 // 		printf("selected move: %d\n", dir);
-// 		progress(&game, dir);
+// 		advance_turn(&game, dir);
 // 		debug_print_board(&game.current_board);
 // 	}
 // }
