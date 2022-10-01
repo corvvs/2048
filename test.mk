@@ -52,6 +52,9 @@ check:
 		||:
 	@printf "$(END)"
 
+test-fclean:
+	rm -rf $(TESTER) $(TARGET_OBJDIR) $(TEST_TARGET)
+
 %:;@:
 
 -include $(TESTCASE_DEPS)

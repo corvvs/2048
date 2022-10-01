@@ -32,10 +32,10 @@ $(NAME)	: $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBS) -o $@
 
 clean: FORCE
-	rm -rf $(OBJDIR)  ./obj-cpp
+	rm -rf $(OBJDIR)
 
-fclean: clean
-	rm -f $(NAME) $(B_NAME) 2048.a
+fclean: clean test-fclean
+	rm -f $(NAME) $(B_NAME)
 
 .PHONY: re
 re: fclean all
@@ -44,6 +44,6 @@ re: fclean all
 FORCE:
 
 cpp:
-	make CC=c++ OBJDIR=./obj-cpp NAME=testfile "CFLAGS=$(CFLAGS) -Wno-deprecated"
+	make CC=clang++ OBJDIR=./obj-cpp NAME=testfile "CFLAGS=$(CFLAGS) -Wno-deprecated"
 
 -include test.mk
