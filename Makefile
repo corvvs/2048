@@ -2,7 +2,7 @@ NAME	:= 2048
 B_NAME	:= 
 
 CC		:= cc
-CFLAGS	:= -Wall -Werror -Wextra -MMD -MP
+CFLAGS	:= -Wall -Werror -Wextra -MMD -MP -g3 -fsanitize=address -fsanitize=undefined
 IOPTS	= $(addprefix -I , $(INCLUDES))
 # LOPTS	= $(addprefix -L , $(INCLUDES))
 LIBS	= -lncurses

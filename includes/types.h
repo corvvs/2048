@@ -7,17 +7,19 @@
 
 #define VACANT_BLOCK 0
 
+typedef uint64_t score_type;
+
 // ブロック
 typedef struct s_block {
 	// ブロックの持っている数(スコア)
 	// 値が VACANT_BLOCK ならそこは空きブロック
-	unsigned long long score;
+	score_type score;
 	// 合体フラグ
 	bool has_united;
 } t_block;
 
 #define MAX_GAME_SIZE 4
-typedef t_block t_block_row[MAX_GAME_SIZE];
+typedef t_block     t_block_row[MAX_GAME_SIZE];
 typedef t_block_row t_block_array[MAX_GAME_SIZE];
 
 typedef struct s_board {
@@ -33,6 +35,9 @@ typedef struct s_movement_result {
 	// 移動した結果
 	// (is_movable == false の時の内容には意味がない)
 	t_board board;
+	// 移動により増えたスコアは,
+	// 「board 上の合体フラグがついているブロックの score の総和」
+	// で計算できるので, データとして保持しておく必要がない
 } t_movement_result;
 
 // 移動方向
@@ -63,7 +68,7 @@ typedef struct t_game {
 	// 現在の状態で移動(上下左右4方向)操作をした時の、移動可否と結果
 	t_movement_result movement_results[4];
 	// 現在のスコア
-	unsigned long long score;
+	score_type score;
 } t_game;
 
 #endif
