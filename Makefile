@@ -44,7 +44,9 @@ re: fclean all
 .PHONY: FORCE
 FORCE:
 
+build-fortest: $(OBJS) FORCE
+
 cpp:
-	make CC=clang++ OBJDIR=./obj-cpp NAME=testfile "CFLAGS=$(CFLAGS) -Wno-deprecated"
+	make build-fortest CC=clang++ OBJDIR=./obj-cpp "CFLAGS=$(CFLAGS) -Wno-deprecated"
 
 -include test.mk
