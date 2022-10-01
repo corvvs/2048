@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef __Apple__
-#define UINT64_FMT "llu"
-#elif __linux__
+#ifdef __linux__
 #define UINT64_FMT "lu"
+#else
+#define UINT64_FMT "llu"
 #endif
 void debug_print_board(const t_board *b)
 {
