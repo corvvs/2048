@@ -2,15 +2,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef __Apple__
+#define UINT64_FMT "llu"
+#elif __linux__
+#define UINT64_FMT "lu"
+#endif
 void debug_print_board(const t_board *b)
 {
 	printf("[H: %zu, W: %zu]\n", b->board_height, b->board_width);
 	for (unsigned int i = 0; i < b->board_height; ++i) {
 		for (unsigned int j = 0; j < b->board_width; ++j) {
 			if (b->field[i][j].has_united) {
-				printf("[%4llu]", b->field[i][j].score);
+				printf("[%4" UINT64_FMT "]", b->field[i][j].score);
 			} else {
-				printf(" %4llu ", b->field[i][j].score);
+				printf(" %4" UINT64_FMT " ", b->field[i][j].score);
 			}
 		}
 		printf("\n");
@@ -25,7 +30,7 @@ void debug_print_result(const t_movement_result *r)
 
 void debug_print_game(const t_game *game)
 {
-	printf("score: %llu\n", game->score);
+	printf("score: %" UINT64_FMT "\n", game->score);
 	debug_print_board(&game->current_board);
 }
 

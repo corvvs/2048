@@ -2,6 +2,7 @@
 #define TYPES_H
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #define ARRAY_LEN(array, element_type) (sizeof(array) / sizeof(element_type))
 
