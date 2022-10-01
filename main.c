@@ -16,7 +16,7 @@ WINDOW *init_ncurses()
 	keypad(stdscr, TRUE);
 	return w;
 }
-
+#include <limits.h>
 int main()
 {
 	t_game  g;
@@ -29,6 +29,7 @@ int main()
 		if (c == KEY_RESIZE) {
 		}
 		spawn_block(&g.current_board);
+		g.current_board.field[0]->score = INT_MAX;
 		refresh_screen(&g, w);
 		// printw("€\n");
 		// printw("[%d]", c);
