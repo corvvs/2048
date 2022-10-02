@@ -2,6 +2,7 @@
 #include <stdbool.h>
 
 #include "game.h"
+#include "board.h"
 #include "mechanics.h"
 #include "refresh_screen.h"
 #include "types.h"
@@ -28,7 +29,7 @@ int main()
 		flushinp();
 		if (c == KEY_RESIZE) {
 		}
-		spawn_block(&g.current_board);
+		spawn_a_block(&g.current_board);
 		g.current_board.field[0]->score = INT_MAX;
 		refresh_screen(&g, w);
 		// printw("€\n");
