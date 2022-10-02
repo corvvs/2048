@@ -48,6 +48,7 @@ static void print_board_row(const t_board_image_row *board_row, const t_image_si
 			t_color_pair_id color = (*board_row)[j].color;
 			attrset(COLOR_PAIR(color) | A_BOLD);
 			print_block_row(&(*board_row)[j].field[i], size);
+			attrset(0);
 		}
 		printw("|");
 		printw("\n");
@@ -61,7 +62,6 @@ static void print_image(const t_image *image, int width)
 		print_board_row(&image->board[i], &image->size);
 	}
 	print_delim_line('-', width);
-	attrset(0);
 }
 
 int get_line_length(const t_image_size *size)
