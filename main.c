@@ -5,11 +5,12 @@
 #include "types.h"
 #include "board.h"
 #include "game.h"
-#include "mechanics.h"
-#include "refresh_screen.h"
 #include "image.h"
+#include "mechanics.h"
 #include "parse_to_image.h"
 #include "print_result.h"
+#include "refresh_screen.h"
+#include "types.h"
 
 #define MY_KEY_EOT 4
 #define MY_KEY_ESC 27
@@ -152,7 +153,7 @@ static void game_loop(t_game *g)
 {
 	WINDOW *w = init_ncurses();
 	if (w == NULL) {
-		return ;
+		return;
 	}
 	srand(g->random_seed);
 	spawn_a_block(&g->current_board);
@@ -191,7 +192,7 @@ static void game_loop(t_game *g)
 
 int main()
 {
-	t_game  g;
-	init_game(&g, time(NULL), 2, 2);
+	t_game g;
+	init_game(&g, time(NULL), 4, 4);
 	game_loop(&g);
 }
