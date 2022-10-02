@@ -58,10 +58,11 @@ void refresh_screen(const t_game *game, WINDOW *w)
 	t_image        image = {};
 	const t_board *board = &game->current_board;
 
-	parse_board_to_image(board, &image, w);
-	int line_length = image.size.block_width * board->board_width + DELIM_COUNT;
-	// printw("l : [%d]\n", line_length);
 	clear();
+	parse_board_to_image(board, &image, w);
+	int delim_count = board->board_width + 1;
+	int line_length = image.size.block_width * board->board_width + delim_count;
+	printw("l : [%d]\n", line_length);
 	print_score(game->score, line_length);
 	print_image(&image, line_length);
 }
