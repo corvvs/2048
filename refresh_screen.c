@@ -45,7 +45,9 @@ static void print_board_row(const t_board_image_row *board_row, const t_image_si
 	for (int i = 0; i < size->block_height; i++) {
 		for (int j = 0; j < size->board_width; j++) {
 			printw("|");
-			print_block_row(&(*board_row)[j][i], size);
+			t_color_pair_id color = (*board_row)[j].color;
+			attrset(COLOR_PAIR(color) | A_BOLD);
+			print_block_row(&(*board_row)[j].field[i], size);
 		}
 		printw("|");
 		printw("\n");
@@ -59,6 +61,7 @@ static void print_image(const t_image *image, int width)
 		print_board_row(&image->board[i], &image->size);
 	}
 	print_delim_line('-', width);
+	attrset(0);
 }
 
 int get_line_length(const t_image_size *size)
@@ -69,7 +72,6 @@ int get_line_length(const t_image_size *size)
 
 void refresh_screen(const t_game *game, WINDOW *w)
 {
-	return;
 	t_image        image;
 	const t_board *board = &game->current_board;
 	parse_board_to_image(board, &image, w);
@@ -79,5 +81,4 @@ void refresh_screen(const t_game *game, WINDOW *w)
 	print_score(game->score, line_length);
 	print_image(&image, line_length);
 	print_key_instructions();
-	attrset(0);
 }

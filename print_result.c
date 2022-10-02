@@ -41,7 +41,7 @@ static void print_board_row(const t_board_image_row *board_row, const t_image_si
 	for (int i = 0; i < size->block_height; i++) {
 		for (int j = 0; j < size->board_width; j++) {
 			printf("|");
-			print_block_row(&(*board_row)[j][i], size);
+			print_block_row(&(*board_row)[j].field[i], size);
 		}
 		printf("|");
 		printf("\n");

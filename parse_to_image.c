@@ -32,8 +32,10 @@ static void set_payload(t_block_image_row *dest, score_type src_num, int width)
 static void parse_to_block_image(score_type num, t_block_image *img, const t_image_size *size)
 {
 	int line_padding_size = size->block_height / 2;
+	int lsb               = get_lsb(num);
 
-	set_payload(&(*img)[line_padding_size], num, size->block_width);
+	img->color = lsb + 1 % 11;
+	set_payload(&img->field[line_padding_size], num, size->block_width);
 }
 
 void init_image_size(t_image_size *size, const t_board *board, WINDOW *w)
