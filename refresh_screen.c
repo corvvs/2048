@@ -63,7 +63,6 @@ void refresh_screen(const t_game *game, WINDOW *w)
 {
 	t_image        image = {};
 	const t_board *board = &game->current_board;
-
 	parse_board_to_image(board, &image, w);
 	int line_length = get_line_length(&image.size);
 	// printw("l : [%d]\n", line_length);

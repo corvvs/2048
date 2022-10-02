@@ -5,9 +5,10 @@
 #include "game.h"
 #include "mechanics.h"
 #include "refresh_screen.h"
-#include "types.h"
 #include "time.h"
+#include "types.h"
 
+#define MY_KEY_EOT 4
 #define MY_KEY_ESC 27
 
 // エラーハンドリング
@@ -67,7 +68,7 @@ static bool key_reaction(t_game *g, WINDOW *w)
 		switch (c) {
 		case MY_KEY_ESC:
 			break;
-		case EOF:
+		case MY_KEY_EOT:
 			break;
 		case KEY_RESIZE:
 			refresh_screen(g, w);
@@ -89,35 +90,73 @@ static bool key_reaction(t_game *g, WINDOW *w)
 	}
 }
 
+static bool winning_reaction(t_game *g, WINDOW *w)
+{
+	if (!is_in_winning(g)) {
+		return false;
+	}
+	refresh_screen(g, w);
+	// かち
+	// TODO: 勝った時の処理
+	// ↓続行を選んだ場合はフラグをセットして続行
+	g->has_won = true;
+	return true;
+}
+
+static bool losing_reaction(t_game *g, WINDOW *w)
+{
+	if (is_slidable(g)) {
+		// 敗北判定
+		return false;
+	}
+	// まけ
+	refresh_screen(g, w);
+	// TODO: 負けた時の処理
+	return true;
+}
+
+
+static void game_loop(t_game *g, WINDOW *w)
+{
+	spawn_a_block(&g->current_board);
+	while (true) {
+		spawn_a_block(&g->current_board);
+		project_next_states(g);
+		// まだ勝利状態でなければ勝利判定
+		if (!g->has_won) {
+			const bool exit_gameloop = winning_reaction(g, w);
+			if (exit_gameloop) {
+				break;
+			}
+		}
+		// 敗北判定
+		{
+			const bool exit_gameloop = losing_reaction(g, w);
+			if (exit_gameloop) {
+				break;
+			}
+		}
+		// 描画
+		refresh_screen(g, w);
+		// キー入力への反応
+		{
+			const bool exit_gameloop = key_reaction(g, w);
+			if (exit_gameloop) {
+				break;
+			}
+		}
+	}
+}
+
 #include <limits.h>
+#include <unistd.h>
 int main()
 {
 	t_game  g;
 	WINDOW *w = init_ncurses();
 	init_game(&g, time(NULL), 4, 4);
 	srand(g.random_seed);
-	spawn_a_block(&g.current_board);
-	refresh_screen(&g, w);
-	while (true) {
-		spawn_a_block(&g.current_board);
-		project_next_states(&g);
-		if (!g.has_won) { // 勝利判定
-			if (is_in_winning(&g)) {
-				// かち
-				break;
-			}
-		}
-		if (!is_slidable(&g)) { // 敗北判定
-			// まけ
-			break;
-		}
-		// 描画
-		refresh_screen(&g, w);
-		// キー入力への反応
-		const bool exit_gameloop = key_reaction(&g, w);
-		if (exit_gameloop) {
-			break;
-		}
-	}
+	game_loop(&g, w);
+	sleep(10000);
 	endwin();
 }

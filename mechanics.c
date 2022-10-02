@@ -61,7 +61,6 @@ static void clear_unified_flags(t_board *board)
 static void
 project_slide(const t_board *current, e_slide_direction direction, t_movement_result *result)
 {
-	printf("dir: %d\n", direction);
 	*result = (t_movement_result){
 		.is_slidable = false,
 		.board       = *current,
@@ -118,7 +117,6 @@ static bool is_power_of_2(int n)
 // 現在勝利状態であるかどうか判定する
 bool is_in_winning(const t_game *game)
 {
-	printf("WI_NVALUE is powrs of 2?: %d\n", is_power_of_2(WIN_VALUE));
 	if (!is_power_of_2(WIN_VALUE)) {
 		return false;
 	}
