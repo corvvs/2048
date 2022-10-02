@@ -1,23 +1,38 @@
 #include <ncurses.h>
 #include <stdbool.h>
 
+#include "game.h"
+#include "mechanics.h"
+#include "refresh_screen.h"
+#include "types.h"
+
 // エラーハンドリング
-void init_ncurses()
+WINDOW *init_ncurses()
 {
-	initscr();
+	WINDOW *w = initscr();
 	timeout(-1);
 	noecho();
 	curs_set(0);
 	keypad(stdscr, TRUE);
+	return w;
 }
-
+#include <limits.h>
 int main()
 {
-	init_ncurses();
+	t_game  g;
+	WINDOW *w = init_ncurses();
+	(void)w;
+	init_game(&g, 1, 4, 4);
 	while (true) {
 		int c = getch();
 		flushinp();
-		printw("[%d]", c);
+		if (c == KEY_RESIZE) {
+		}
+		spawn_block(&g.current_board);
+		g.current_board.field[0]->score = INT_MAX;
+		refresh_screen(&g, w);
+		// printw("€\n");
+		// printw("[%d]", c);
 	}
 	endwin();
 }
