@@ -5,7 +5,7 @@
 #include "util.h"
 
 #define INFOMATION_SIZE 5
-int get_usable_win_width(WINDOW *w)
+static int get_usable_win_width(WINDOW *w)
 {
 	int height, width;
 
@@ -17,14 +17,7 @@ int get_usable_win_width(WINDOW *w)
 	return min_int(usable_width, MAX_DISPLAY_SIZE);
 }
 
-void set_wchar(t_block_image_row *row, wchar_t c, int size)
-{
-	for (int i = 0; i < size; i++) {
-		(*row)[i] = c;
-	}
-}
-
-void set_payload(t_block_image_row *dest, score_type src_num, int width)
+static void set_payload(t_block_image_row *dest, score_type src_num, int width)
 {
 	if (src_num == VACANT_BLOCK) {
 		return;
@@ -37,7 +30,7 @@ void set_payload(t_block_image_row *dest, score_type src_num, int width)
 	}
 }
 
-void parse_to_block_image(score_type num, t_block_image *img, const t_image_size *size)
+static void parse_to_block_image(score_type num, t_block_image *img, const t_image_size *size)
 {
 	int line_padding_size = size->block_height / 2;
 
@@ -57,5 +50,13 @@ void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w)
 			score_type num = board->field[i][j].score;
 			parse_to_block_image(num, &image->board[i][j], &image->size);
 		}
+	}
+}
+
+// bonusで使うかも
+void set_wchar(t_block_image_row *row, wchar_t c, int size)
+{
+	for (int i = 0; i < size; i++) {
+		(*row)[i] = c;
 	}
 }

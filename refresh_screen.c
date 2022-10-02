@@ -6,13 +6,13 @@
 #include "refresh_screen.h"
 #include "types.h"
 
-void print_score(score_type score, int width)
+static void print_score(score_type score, int width)
 {
 	(void)width;
 	printw("score : %d\n", score);
 }
 
-void print_delim_line(wchar_t delim, int width)
+static void print_delim_line(wchar_t delim, int width)
 {
 	for (int i = 0; i < width; i++) {
 		printw("%lc", delim);
@@ -20,7 +20,7 @@ void print_delim_line(wchar_t delim, int width)
 	printw("\n");
 }
 
-void print_block_row(const t_block_image_row *block_row, const t_image_size *size)
+static void print_block_row(const t_block_image_row *block_row, const t_image_size *size)
 {
 	for (int i = 0; i < size->block_width; i++) {
 		wchar_t c = (*block_row)[i];
@@ -32,7 +32,7 @@ void print_block_row(const t_block_image_row *block_row, const t_image_size *siz
 	}
 }
 
-void print_board_row(const t_board_image_row *board_row, const t_image_size *size)
+static void print_board_row(const t_board_image_row *board_row, const t_image_size *size)
 {
 	for (int i = 0; i < size->block_height; i++) {
 		for (int j = 0; j < size->board_width; j++) {
@@ -44,7 +44,7 @@ void print_board_row(const t_board_image_row *board_row, const t_image_size *siz
 	}
 }
 
-void print_image(const t_image *image, int width)
+static void print_image(const t_image *image, int width)
 {
 	for (int i = 0; i < image->size.board_height; i++) {
 		print_delim_line('-', width);
