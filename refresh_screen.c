@@ -3,7 +3,6 @@
 
 #include "image.h"
 #include "parse_to_image.h"
-#include "refresh_screen.h"
 #include "types.h"
 
 static void print_key_instructions()
