@@ -46,9 +46,9 @@ static void print_board_row(const t_board_image_row *board_row, const t_image_si
 		for (int j = 0; j < size->board_width; j++) {
 			printw("|");
 			t_color_pair_id color = (*board_row)[j].color;
-			attron(COLOR_PAIR(color));
+			attrset(COLOR_PAIR(color) | A_BOLD);
 			print_block_row(&(*board_row)[j].field[i], size);
-			attron(COLOR_PAIR(0));
+			attrset(0);
 		}
 		printw("|");
 		printw("\n");
@@ -78,7 +78,6 @@ void refresh_screen(const t_game *game, WINDOW *w)
 	int line_length = get_line_length(&image.size);
 	// printw("l : [%d]\n", line_length);
 	clear();
-	attrset(0 | A_BOLD);
 	print_score(game->score, line_length);
 	print_image(&image, line_length);
 	print_key_instructions();
