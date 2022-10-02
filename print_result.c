@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 
 #include "board.h"
 #include "image.h"
@@ -12,17 +13,41 @@
 #define UINT64_FMT "llu"
 #endif
 
+
+static size_t ft_strlen(const char* str) {
+	size_t n = 0;
+	while (str[n]) {
+		n += 1;
+	}
+	return n;
+}
+
+static void ft_putstr(const char* str) {
+	write(STDOUT_FILENO, str, ft_strlen(str));
+}
+
+static void ft_putwchar(wchar_t wc) {
+	char c = wc;
+	write(STDOUT_FILENO, &c, 1);
+}
+
 static void print_score(score_type score)
 {
-	printf("score : %" UINT64_FMT "\n", score);
+	ft_putstr("score : ");
+	{
+		char n[100];
+		int len = ft_utoa_len(score, n, 0);
+		write(STDOUT_FILENO, n, len);
+	}
+	ft_putstr("\n");
 }
 
 static void print_delim_line(wchar_t delim, int width)
 {
 	for (int i = 0; i < width; i++) {
-		printf("%lc", delim);
+		ft_putwchar(delim);
 	}
-	printf("\n");
+	ft_putstr("\n");
 }
 
 static void print_block_row(const t_block_image_row *block_row, const t_image_size *size)
@@ -30,9 +55,9 @@ static void print_block_row(const t_block_image_row *block_row, const t_image_si
 	for (int i = 0; i < size->block_width; i++) {
 		wchar_t c = (*block_row)[i];
 		if (c) {
-			printf("%lc", c);
+			ft_putwchar(c);
 		} else {
-			printf("%lc", ' ');
+			ft_putwchar(' ');
 		}
 	}
 }
@@ -41,11 +66,11 @@ static void print_board_row(const t_board_image_row *board_row, const t_image_si
 {
 	for (int i = 0; i < size->block_height; i++) {
 		for (int j = 0; j < size->board_width; j++) {
-			printf("|");
+			ft_putstr("|");
 			print_block_row(&(*board_row)[j].field[i], size);
 		}
-		printf("|");
-		printf("\n");
+		ft_putstr("|");
+		ft_putstr("\n");
 	}
 }
 
