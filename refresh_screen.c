@@ -14,7 +14,7 @@ static void print_key_instructions()
 static void print_score(score_type score, int width)
 {
 	(void)width;
-	printw("score : %d\n", score);
+	printw("score : %ld\n", score);
 }
 
 static void print_delim_line(wchar_t delim, int width)
@@ -58,7 +58,7 @@ static void print_image(const t_image *image, int width)
 	print_delim_line('-', width);
 }
 
-static int get_line_length(const t_image_size *size)
+int get_line_length(const t_image_size *size)
 {
 	int delim_count = size->board_width + 1;
 	return size->block_width * size->board_width + delim_count;
