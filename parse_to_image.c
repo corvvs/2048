@@ -38,11 +38,12 @@ static void parse_to_block_image_text(score_type num, t_block_image *img, const 
 
 void init_image_size(t_image_size *size, const t_board *board, WINDOW *w)
 {
+	int longer         = max_int(board->board_height, board->board_width);
 	int width          = get_usable_win_width(w);
-	int delim_count    = board->board_width + 1;
+	int delim_count    = longer + 1;
 	size->board_width  = board->board_width;
 	size->board_height = board->board_height;
-	size->block_width  = max_int(0, (width - delim_count) / board->board_width);
+	size->block_width  = max_int(0, (width - delim_count) / longer);
 	size->block_height = max_int(1, size->block_width / 2);
 }
 
