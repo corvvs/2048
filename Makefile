@@ -4,7 +4,7 @@ B_NAME	:=
 CXX		:= clang++
 
 CC		:= cc
-CFLAGS	:= -Wall -Werror -Wextra -MMD -MP -g3 -fsanitize=address -fsanitize=undefined
+CFLAGS	:= -Wall -Werror -Wextra -MMD -MP
 
 LIBS	= -lncurses
 
@@ -20,6 +20,7 @@ INCLUDES	:= -I ./includes
 all		: $(NAME) FORCE
 
 bonus : CFLAGS += -D BONUS
+bonus : all
 # bonus : _libft $(B_NAME)
 
 .PHONY: $(DEPENDS)

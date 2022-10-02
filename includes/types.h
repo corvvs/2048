@@ -10,6 +10,8 @@
 
 typedef uint64_t score_type;
 
+#define SCORE_UNAVAILABLE ((score_type)(-1))
+
 // ブロック
 typedef struct s_block {
 	// ブロックの持っている数(スコア)
@@ -74,6 +76,8 @@ typedef struct t_game {
 	t_movement_result movement_results[4];
 	// 現在のスコア
 	score_type score;
+	// ハイスコア
+	score_type high_score;
 } t_game;
 
 #endif
