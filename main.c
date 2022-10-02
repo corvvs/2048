@@ -46,29 +46,29 @@ int main()
 // 	}
 // }
 
-// #include "includes/game.h"
-// #include "includes/mechanics.h"
+// #include "board.h"
+// #include "debug.h"
+// #include "game.h"
+// #include "mechanics.h"
+// #include <unistd.h>
 
 // int main()
 // {
 // 	t_game game;
-// 	init_game(&game, 1000007, 4, 4);
+// 	init_game(&game, 1000007, 5, 5);
 // 	debug_print_board(&game.current_board);
-// 	spawn_block(&game.current_board);
-// 	for (int i = 1; i <= 50; ++i) {
+// 	spawn_a_block(&game.current_board);
+// 	for (int i = 1;; ++i) {
 // 		printf("[%d-th hand]\n", i);
-// 		spawn_block(&game.current_board);
-// 		debug_print_board(&game.current_board);
-// 		project_movements(&game);
-// 		// printf("[move_up]\n");
-// 		// debug_print_result(&game.movement_results[MD_UP]);
-// 		// printf("[move_right]\n");
-// 		// debug_print_result(&game.movement_results[MD_RIGHT]);
-// 		// printf("[move_down]\n");
-// 		// debug_print_result(&game.movement_results[MD_DOWN]);
-// 		// printf("[move_left]\n");
-// 		// debug_print_result(&game.movement_results[MD_LEFT]);
-// 		if (!is_movable(&game)) {
+// 		spawn_a_block(&game.current_board);
+// 		debug_print_game(&game);
+// 		if (!game.has_won && is_in_winning(&game)) {
+// 			printf("[GREAT!!]\n");
+// 			break;
+// 		}
+// 		game.has_won = true;
+// 		project_next_states(&game);
+// 		if (!is_slidable(&game)) {
 // 			printf("[you lost; no available movement]\n");
 // 			break;
 // 		}
@@ -76,13 +76,18 @@ int main()
 // 		e_move_direction dirs[] = {MD_UP, MD_RIGHT, MD_DOWN, MD_LEFT};
 // 		e_move_direction dir;
 // 		while (true) {
-// 			dir = dirs[rand() % 4];
-// 			if (game.movement_results[dir].is_movable) {
-// 				break;
+// 			char m;
+// 			read(STDIN_FILENO, &m, 1);
+// 			int d = m - '0';
+// 			if (0 <= d && d < 4) {
+// 				dir = dirs[d];
+// 				if (game.movement_results[dir].is_slidable) {
+// 					break;
+// 				}
 // 			}
 // 		}
 // 		printf("selected move: %d\n", dir);
-// 		progress(&game, dir);
+// 		advance_turn(&game, dir);
 // 		debug_print_board(&game.current_board);
 // 	}
 // }

@@ -3,7 +3,7 @@
 
 bool operator==(const t_block &lhs, const t_block &rhs)
 {
-	return lhs.has_united == rhs.has_united && lhs.score == rhs.score;
+	return lhs.has_unified == rhs.has_unified && lhs.score == rhs.score;
 }
 
 bool operator==(const t_board &lhs, const t_board &rhs)
@@ -23,7 +23,7 @@ bool operator==(const t_board &lhs, const t_board &rhs)
 
 bool operator==(const t_movement_result &lhs, const t_movement_result &rhs)
 {
-	return lhs.is_movable == rhs.is_movable && lhs.board == rhs.board;
+	return lhs.is_slidable == rhs.is_slidable && lhs.board == rhs.board;
 }
 
 bool operator==(const t_game &lhs, const t_game &rhs)
@@ -60,7 +60,7 @@ bool operator!=(const t_game &lhs, const t_game &rhs)
 
 std::ostream &operator<<(std::ostream &os, const t_block &v)
 {
-	os << "\nscore: " << v.score << "\nhas_united: " << v.has_united;
+	os << "\nscore: " << v.score << "\nhas_united: " << v.has_unified;
 	return os;
 }
 
@@ -78,7 +78,7 @@ std::ostream &operator<<(std::ostream &os, const t_board &v)
 
 std::ostream &operator<<(std::ostream &os, const t_movement_result &v)
 {
-	os << "\nis_movable: " << v.is_movable << "\nboard: " << v.board;
+	os << "\nis_movable: " << v.is_slidable << "\nboard: " << v.board;
 	return os;
 }
 

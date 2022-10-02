@@ -3,13 +3,9 @@
 
 #include "types.h"
 
-void debug_print_board(const t_board *b);
-void debug_print_result(const t_movement_result *r);
-void debug_print_game(const t_game *game);
-void spawn_block(t_board *b);
-// 現在の状態から4通りの移動をした結果を計算し, 結果を控えておく
-void project_movements(t_game *game);
-void progress(t_game *game, e_move_direction direction);
-bool is_movable(const t_game *game);
+void project_next_states(t_game *game);
+void advance_turn(t_game *game, e_move_direction direction);
+bool is_in_winning(const t_game *game);
+bool is_slidable(const t_game *game);
 
 #endif
