@@ -1,5 +1,6 @@
 #include "block.h"
 #include "board.h"
+#include "highscore.h"
 #include "types.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -107,6 +108,10 @@ void advance_turn(t_game *game, e_slide_direction direction)
 	t_movement_result *selected = &game->movement_results[direction];
 	game->current_board         = selected->board;
 	game->score += score_increment(&selected->board);
+	if (game->score > game->high_score) {
+		game->high_score = game->score;
+		set_highscore(game->high_score);
+	}
 }
 
 static bool is_power_of_2(int n)

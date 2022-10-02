@@ -12,11 +12,14 @@ static void print_key_instructions()
 	attrset(0);
 }
 
-static void print_score(score_type score, int width)
+static void print_score(const t_game *game, int width)
 {
 	(void)width;
 	attrset(0 | A_UNDERLINE | A_BOLD);
-	printw("score : %ld\n", score);
+#ifdef BONUS
+	printw("high : %ld ", game->high_score);
+#endif
+	printw("score : %ld\n", game->score);
 	attrset(0);
 }
 
@@ -78,7 +81,7 @@ void refresh_screen(const t_game *game, WINDOW *w)
 	int line_length = get_line_length(&image.size);
 	// printw("l : [%d]\n", line_length);
 	clear();
-	print_score(game->score, line_length);
+	print_score(game, line_length);
 	print_image(&image, line_length);
 	print_key_instructions();
 }

@@ -2,10 +2,10 @@
 #include <unistd.h>
 
 #include "board.h"
+#include "ft_utils.h"
 #include "image.h"
 #include "parse_to_image.h"
 #include "types.h"
-#include "ft_utils.h"
 
 #ifdef __linux__
 #define UINT64_FMT "lu"
@@ -13,8 +13,8 @@
 #define UINT64_FMT "llu"
 #endif
 
-
-static size_t ft_strlen(const char* str) {
+static size_t ft_strlen(const char *str)
+{
 	size_t n = 0;
 	while (str[n]) {
 		n += 1;
@@ -22,11 +22,13 @@ static size_t ft_strlen(const char* str) {
 	return n;
 }
 
-static void ft_putstr(const char* str) {
+static void ft_putstr(const char *str)
+{
 	write(STDOUT_FILENO, str, ft_strlen(str));
 }
 
-static void ft_putwchar(wchar_t wc) {
+static void ft_putwchar(wchar_t wc)
+{
 	char c = wc;
 	write(STDOUT_FILENO, &c, 1);
 }
@@ -36,7 +38,7 @@ static void print_score(score_type score)
 	ft_putstr("score : ");
 	{
 		char n[100];
-		int len = ft_utoa_len(score, n, 0);
+		int  len = ft_utoa_len(score, n, 0);
 		write(STDOUT_FILENO, n, len);
 	}
 	ft_putstr("\n");

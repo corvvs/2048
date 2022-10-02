@@ -2,8 +2,8 @@
 #include <wchar.h>
 
 #include "characters.h"
-#include "image.h"
 #include "ft_utils.h"
+#include "image.h"
 
 #define INFOMATION_SIZE 5
 static int get_usable_win_width(WINDOW *w)

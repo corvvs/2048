@@ -20,6 +20,7 @@ INCLUDES	:= -I ./includes
 all		: $(NAME) FORCE
 
 bonus : CFLAGS += -D BONUS
+bonus : all
 # bonus : _libft $(B_NAME)
 
 .PHONY: $(DEPENDS)
