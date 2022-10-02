@@ -1,5 +1,5 @@
-#ifndef UTIL_H
-#define UTIL_H
+#ifndef FT_UTILS_H
+#define FT_UTILS_H
 
 #include <stdint.h>
 int ft_utoa_len(uint64_t n, char *s, int len);

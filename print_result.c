@@ -4,6 +4,7 @@
 #include "image.h"
 #include "parse_to_image.h"
 #include "types.h"
+#include "ft_utils.h"
 
 #ifdef __linux__
 #define UINT64_FMT "lu"

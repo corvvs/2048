@@ -3,7 +3,7 @@
 
 #include "characters.h"
 #include "image.h"
-#include "util.h"
+#include "ft_utils.h"
 
 #define INFOMATION_SIZE 5
 static int get_usable_win_width(WINDOW *w)
