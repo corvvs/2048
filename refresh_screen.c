@@ -6,6 +6,11 @@
 #include "refresh_screen.h"
 #include "types.h"
 
+static void print_key_instructions()
+{
+	printw("\n[INSTRUCTIONS] Arrow: slide blocks | Esc: exit\n");
+}
+
 static void print_score(score_type score, int width)
 {
 	(void)width;
@@ -69,4 +74,5 @@ void refresh_screen(const t_game *game, WINDOW *w)
 	clear();
 	print_score(game->score, line_length);
 	print_image(&image, line_length);
+	print_key_instructions();
 }

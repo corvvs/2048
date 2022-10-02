@@ -64,6 +64,7 @@ static int get_keych()
 static bool key_reaction(t_game *g, WINDOW *w)
 {
 	while (true) {
+		refresh_screen(g, w);
 		int c = get_keych();
 		switch (c) {
 		case MY_KEY_ESC:
@@ -71,7 +72,6 @@ static bool key_reaction(t_game *g, WINDOW *w)
 		case MY_KEY_EOT:
 			break;
 		case KEY_RESIZE:
-			refresh_screen(g, w);
 			continue;
 		case KEY_UP:
 		case KEY_DOWN:
@@ -90,6 +90,28 @@ static bool key_reaction(t_game *g, WINDOW *w)
 	}
 }
 
+static int ask_yn()
+{
+	int c;
+	while (true) {
+		c = getch();
+		flushinp();
+		switch (c) {
+		case 'y':
+		case 'n':
+			return c;
+		default:
+			continue;
+		}
+	}
+}
+
+static bool ask_for_exit()
+{
+	printw("YOU WIN! continue ? y/n\n");
+	return ask_yn() == 'n';
+}
+
 static bool winning_reaction(t_game *g, WINDOW *w)
 {
 	if (!is_in_winning(g)) {
@@ -100,7 +122,7 @@ static bool winning_reaction(t_game *g, WINDOW *w)
 	// TODO: 勝った時の処理
 	// ↓続行を選んだ場合はフラグをセットして続行
 	g->has_won = true;
-	return true;
+	return ask_for_exit();
 }
 
 static bool losing_reaction(t_game *g, WINDOW *w)
@@ -114,7 +136,6 @@ static bool losing_reaction(t_game *g, WINDOW *w)
 	// TODO: 負けた時の処理
 	return true;
 }
-
 
 static void game_loop(t_game *g, WINDOW *w)
 {
@@ -136,8 +157,6 @@ static void game_loop(t_game *g, WINDOW *w)
 				break;
 			}
 		}
-		// 描画
-		refresh_screen(g, w);
 		// キー入力への反応
 		{
 			const bool exit_gameloop = key_reaction(g, w);
@@ -157,6 +176,5 @@ int main()
 	init_game(&g, time(NULL), 4, 4);
 	srand(g.random_seed);
 	game_loop(&g, w);
-	sleep(10000);
 	endwin();
 }
