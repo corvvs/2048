@@ -1,8 +1,5 @@
-#ifndef DISPLAY_H
-#define DISPLAY_H
-
-#include <ncurses.h>
-
+#ifndef IMAGE_H
+#define IMAGE_H
 #include "types.h"
 
 #define DELIM_COUNT MAX_GAME_SIZE + 1
@@ -25,7 +22,5 @@ typedef struct {
 	t_board_image board;
 	t_image_size  size;
 } t_image;
-
-void refresh_screen(const t_game *game, WINDOW *w);
 
 #endif

@@ -1,9 +1,9 @@
 #include <ncurses.h>
 #include <stdbool.h>
 
-#include "display.h"
 #include "game.h"
 #include "mechanics.h"
+#include "refresh_screen.h"
 #include "types.h"
 
 // エラーハンドリング
