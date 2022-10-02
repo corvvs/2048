@@ -2,17 +2,17 @@
 #include <wchar.h>
 
 #include "characters.h"
-#include "image.h"
 #include "ft_utils.h"
+#include "image.h"
 
 #define INFOMATION_SIZE 5
-static int get_usable_win_width(WINDOW *w)
+int get_usable_win_width(WINDOW *w)
 {
 	int height, width;
 
 	getmaxyx(w, height, width); // errorハンドリング?
-	int usable_height = max_int(0, height - INFOMATION_SIZE);
-	int usable_width  = min_int(width / 2, usable_height) * 2;
+	int usable_height = max_int(0, height - INFOMATION_SIZE - 1);
+	int usable_width  = min_int(width / 2 - 1, usable_height) * 2;
 	// printw("x : [%d] y : [%d]\n", width, height);
 	return min_int(usable_width, MAX_DISPLAY_SIZE);
 }
@@ -118,7 +118,7 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 
 	// [3. 文字ごとにデータを入れていく]
 	int lsb    = get_lsb(num);
-	img->color = lsb + 1 % 11;
+	img->color = (lsb + 1) % 11;
 	for (int i = d - 1; 0 <= i; --i, num /= 10) {
 		int          k     = num % 10;
 		const char **griph = digit_griphs[k];
@@ -173,7 +173,7 @@ static bool can_display_aa(const t_board *board, const t_image_size *size)
 void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w)
 {
 	init_image_size(&image->size, board, w);
-	// printw("bw: [%d] bh: [%d]\n", image->size.block_width, image->size.block_height);
+	printw("bw: [%d] bh: [%d]\n", image->size.block_width, image->size.block_height);
 
 	const bool display_nums_in_aa = can_display_aa(board, &image->size);
 
