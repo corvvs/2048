@@ -18,7 +18,7 @@
 
 void create_colors()
 {
-	int offset = 10;
+	int offset = 15;
 	for (int i = 1; i <= 11; i++) {
 		int r = i * (255 / 11);
 		init_color(offset + i, r, 50, 50);
