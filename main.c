@@ -14,7 +14,20 @@
 #define MY_KEY_EOT 4
 #define MY_KEY_ESC 27
 
-// エラーハンドリング
+#include <unistd.h>
+
+void create_colors()
+{
+	int offset = 10;
+	for (int i = 1; i <= 11; i++) {
+		int r = i * (255 / 11);
+		init_color(offset + i, r, 50, 50);
+		init_pair(i, COLOR_WHITE, offset + i);
+		attrset(COLOR_PAIR(i) | A_BOLD);
+		printw("[r %d i %d]     0000000000    \n", r, i);
+	}
+}
+
 WINDOW *init_ncurses()
 {
 	WINDOW *w = initscr();
@@ -23,6 +36,7 @@ WINDOW *init_ncurses()
 	curs_set(0);
 	keypad(stdscr, TRUE);
 	start_color();
+	create_colors();
 	return w;
 }
 
