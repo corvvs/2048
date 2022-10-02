@@ -23,4 +23,6 @@ typedef struct {
 	t_image_size  size;
 } t_image;
 
+int get_line_length(const t_image_size *size);
+
 #endif

@@ -3,8 +3,8 @@
 
 #include <ncurses.h>
 
+#include "image.h"
 #include "types.h"
 
 void refresh_screen(const t_game *game, WINDOW *w);
-
 #endif

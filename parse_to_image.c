@@ -53,6 +53,13 @@ void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w)
 	}
 }
 
+t_image create_result_image(const t_board *board, WINDOW *w)
+{
+	t_image image;
+	parse_board_to_image(board, &image, w);
+	return image;
+}
+
 // bonusで使うかも
 void set_wchar(t_block_image_row *row, wchar_t c, int size)
 {

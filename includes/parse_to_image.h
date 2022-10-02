@@ -6,6 +6,7 @@
 #include "image.h"
 #include "types.h"
 
-void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w);
+void    parse_board_to_image(const t_board *board, t_image *image, WINDOW *w);
+t_image create_result_image(const t_board *board, WINDOW *w);
 
 #endif

@@ -169,6 +169,11 @@ static void game_loop(t_game *g, WINDOW *w)
 
 #include <limits.h>
 #include <unistd.h>
+
+#include "image.h"
+#include "parse_to_image.h"
+#include "print_result.h"
+
 int main()
 {
 	t_game  g;
@@ -176,5 +181,7 @@ int main()
 	init_game(&g, time(NULL), 4, 4);
 	srand(g.random_seed);
 	game_loop(&g, w);
+	t_image image = create_result_image(&g.current_board, w);
 	endwin();
+	print_result(&image, g.score);
 }
