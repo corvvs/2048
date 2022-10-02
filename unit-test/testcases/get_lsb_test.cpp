@@ -1,5 +1,5 @@
 #include "gtest.h"
-#include "util.h"
+#include "ft_utils.h"
 
 TEST(util, get_lsb)
 {
