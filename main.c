@@ -1,12 +1,15 @@
 #include <ncurses.h>
 #include <stdbool.h>
+#include <time.h>
 
+#include "types.h"
 #include "board.h"
 #include "game.h"
 #include "mechanics.h"
 #include "refresh_screen.h"
-#include "time.h"
-#include "types.h"
+#include "image.h"
+#include "parse_to_image.h"
+#include "print_result.h"
 
 #define MY_KEY_EOT 4
 #define MY_KEY_ESC 27
@@ -112,6 +115,13 @@ static bool ask_for_exit()
 	return ask_yn() == 'n';
 }
 
+static void move_back_cursor_n_lines(int n)
+{
+	int y = 0, x = 0;
+	getsyx(y, x);
+	move(y - n, x);
+}
+
 static bool winning_reaction(t_game *g, WINDOW *w)
 {
 	if (!is_in_winning(g)) {
@@ -122,6 +132,7 @@ static bool winning_reaction(t_game *g, WINDOW *w)
 	// TODO: 勝った時の処理
 	// ↓続行を選んだ場合はフラグをセットして続行
 	g->has_won = true;
+	move_back_cursor_n_lines(1);
 	return ask_for_exit();
 }
 
@@ -137,8 +148,13 @@ static bool losing_reaction(t_game *g, WINDOW *w)
 	return true;
 }
 
-static void game_loop(t_game *g, WINDOW *w)
+static void game_loop(t_game *g)
 {
+	WINDOW *w = init_ncurses();
+	if (w == NULL) {
+		return ;
+	}
+	srand(g->random_seed);
 	spawn_a_block(&g->current_board);
 	while (true) {
 		spawn_a_block(&g->current_board);
@@ -165,23 +181,17 @@ static void game_loop(t_game *g, WINDOW *w)
 			}
 		}
 	}
+	t_image image = create_result_image(&g->current_board, w);
+	endwin();
+	print_result(&image, g->score);
 }
 
 #include <limits.h>
 #include <unistd.h>
 
-#include "image.h"
-#include "parse_to_image.h"
-#include "print_result.h"
-
 int main()
 {
 	t_game  g;
-	WINDOW *w = init_ncurses();
-	init_game(&g, time(NULL), 4, 4);
-	srand(g.random_seed);
-	game_loop(&g, w);
-	t_image image = create_result_image(&g.current_board, w);
-	endwin();
-	print_result(&image, g.score);
+	init_game(&g, time(NULL), 2, 2);
+	game_loop(&g);
 }
