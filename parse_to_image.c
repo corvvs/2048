@@ -36,14 +36,20 @@ static void parse_to_block_image(score_type num, t_block_image *img, const t_ima
 	set_payload(&(*img)[line_padding_size], num, size->block_width);
 }
 
+void init_image_size(t_image_size *size, const t_board *board, WINDOW *w)
+{
+	int width          = get_usable_win_width(w);
+	int delim_count    = board->board_width + 1;
+	size->board_width  = board->board_width;
+	size->board_height = board->board_height;
+	size->block_width  = max_int(0, (width - delim_count) / board->board_width);
+	size->block_height = max_int(1, size->block_width / 2);
+}
+
 void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w)
 {
-	int width                = get_usable_win_width(w);
-	int delim_count          = board->board_width + 1;
-	image->size.board_width  = board->board_width;
-	image->size.board_height = board->board_height;
-	image->size.block_width  = max_int(0, (width - delim_count) / board->board_width);
-	image->size.block_height = max_int(1, image->size.block_width / 2);
+	*image = (t_image){};
+	init_image_size(&image->size, board, w);
 	// printw("bw: [%d] bh: [%d]\n", image->size.block_width, image->size.block_height);
 	for (unsigned int i = 0; i < board->board_height; i++) {
 		for (unsigned int j = 0; j < board->board_width; j++) {
