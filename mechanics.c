@@ -112,18 +112,7 @@ void advance_turn(t_game *game, e_slide_direction direction)
 
 static bool is_power_of_2(int n)
 {
-	// nが2冪である <=> nが正かつ立っているビットが1つ
-	if (n <= 0) {
-		return false;
-	}
-	// return n != 0 && (n & n -1) == 0b0; でいけるかも？
-	unsigned int u = n;
-	u              = (u & 0x55555555) + (u >> 1 & 0x55555555);
-	u              = (u & 0x33333333) + (u >> 2 & 0x33333333);
-	u              = (u & 0x0f0f0f0f) + (u >> 4 & 0x0f0f0f0f);
-	u              = (u & 0x00ff00ff) + (u >> 8 & 0x00ff00ff);
-	u              = (u & 0x0000ffff) + (u >> 16 & 0x0000ffff);
-	return u == 1;
+	return n > 0 && (n & (n - 1)) == 0b0;
 }
 
 // 現在勝利状態であるかどうか判定する
