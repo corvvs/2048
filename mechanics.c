@@ -116,6 +116,7 @@ static bool is_power_of_2(int n)
 	if (n <= 0) {
 		return false;
 	}
+	// return n != 0 && (n & n -1) == 0b0; でいけるかも？
 	unsigned int u = n;
 	u              = (u & 0x55555555) + (u >> 1 & 0x55555555);
 	u              = (u & 0x33333333) + (u >> 2 & 0x33333333);
