@@ -52,7 +52,6 @@ score_type get_highscore()
 			break;
 		}
 	}
-	dprintf(3, "read_size: %zd, i = %zd\n", read_size, i);
 	if (i == 0) {
 		return SCORE_UNAVAILABLE;
 	}
