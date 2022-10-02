@@ -206,9 +206,35 @@ static void game_loop(t_game *g)
 #include <limits.h>
 #include <unistd.h>
 
-int main()
+size_t get_game_height(int argc, char **argv)
+{
+	if (argc < 2) {
+		return 4;
+	}
+	char *s = argv[1];
+	if ('1' <= s[0] && s[0] <= '5' && s[1] == '\0') {
+		return s[0] - '0';
+	}
+	return 4;
+}
+
+size_t get_game_width(int argc, char **argv)
+{
+	if (argc < 3) {
+		return 4;
+	}
+	char *s = argv[2];
+	if ('1' <= s[0] && s[0] <= '5' && s[1] == '\0') {
+		return s[0] - '0';
+	}
+	return 4;
+}
+
+int main(int argc, char **argv)
 {
 	t_game g;
-	init_game(&g, time(NULL), 4, 4);
+	size_t height = get_game_height(argc, argv);
+	size_t width  = get_game_width(argc, argv);
+	init_game(&g, time(NULL), height, width);
 	game_loop(&g);
 }
