@@ -16,6 +16,28 @@
 
 #include <unistd.h>
 
+static void wait_any_key_input(t_game *g, WINDOW *w)
+{
+	while (true) {
+		refresh_screen2(g, w);
+		attrset(0 | A_UNDERLINE | A_BOLD);
+		printw("Press any key to start game !\n");
+		if (getch() == KEY_RESIZE) {
+			continue;
+		}
+		break;
+	}
+	attrset(0 | A_BOLD);
+}
+
+void print_menu(WINDOW *w)
+{
+	t_game g;
+	init_game(&g, 1, 1, 1);
+	g.current_board.field[0][0].score = 2048;
+	wait_any_key_input(&g, w);
+}
+
 void create_colors()
 {
 	int offset = 15;
@@ -108,13 +130,22 @@ static bool key_reaction(t_game *g, WINDOW *w)
 	}
 }
 
-static int ask_yn()
+static int ask_continue(t_game *g, WINDOW *w)
 {
-	int c;
+	refresh_screen2(g, w);
+	attrset(0 | A_UNDERLINE | A_BOLD);
+	printw("YOU WIN! continue ? y/n\n");
+	attrset(0 | A_BOLD);
 	while (true) {
-		c = getch();
+		int c = getch();
 		flushinp();
 		switch (c) {
+		case KEY_RESIZE:
+			refresh_screen2(g, w);
+			attrset(0 | A_UNDERLINE | A_BOLD);
+			printw("YOU WIN! continue ? y/n\n");
+			attrset(0 | A_BOLD);
+			continue;
 		case 'y':
 		case 'n':
 			return c;
@@ -124,33 +155,16 @@ static int ask_yn()
 	}
 }
 
-static bool ask_for_exit()
-{
-	attrset(0 | A_UNDERLINE | A_BOLD);
-	printw("YOU WIN! continue ? y/n\n");
-	attrset(0 | A_BOLD);
-	return ask_yn() == 'n';
-}
-
-static void move_back_cursor_n_lines(int n)
-{
-	int y = 0, x = 0;
-	getsyx(y, x);
-	move(y - n, x);
-}
-
 static bool winning_reaction(t_game *g, WINDOW *w)
 {
 	if (!is_in_winning(g)) {
 		return false;
 	}
-	refresh_screen(g, w);
 	// かち
 	// TODO: 勝った時の処理
 	// ↓続行を選んだ場合はフラグをセットして続行
 	g->has_won = true;
-	move_back_cursor_n_lines(1);
-	return ask_for_exit();
+	return ask_continue(g, w) == 'n';
 }
 
 static bool losing_reaction(t_game *g, WINDOW *w)
@@ -171,6 +185,7 @@ static void game_loop(t_game *g)
 	if (w == NULL) {
 		return;
 	}
+	print_menu(w);
 	srand(g->random_seed);
 	spawn_a_block(&g->current_board);
 	while (true) {

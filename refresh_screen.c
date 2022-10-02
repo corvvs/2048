@@ -82,3 +82,15 @@ void refresh_screen(const t_game *game, WINDOW *w)
 	print_image(&image, line_length);
 	print_key_instructions();
 }
+
+void refresh_screen2(const t_game *game, WINDOW *w)
+{
+	t_image        image = {};
+	const t_board *board = &game->current_board;
+	parse_board_to_image(board, &image, w);
+	int line_length = get_line_length(&image.size);
+	// printw("l : [%d]\n", line_length);
+	clear();
+	print_score(game->score, line_length);
+	print_image(&image, line_length);
+}
