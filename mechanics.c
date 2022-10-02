@@ -59,7 +59,7 @@ static void clear_unified_flags(t_board *board)
 }
 
 static void
-project_slide(const t_board *current, e_move_direction direction, t_movement_result *result)
+project_slide(const t_board *current, e_slide_direction direction, t_movement_result *result)
 {
 	printf("dir: %d\n", direction);
 	*result = (t_movement_result){
@@ -79,10 +79,10 @@ project_slide(const t_board *current, e_move_direction direction, t_movement_res
 // 現在の状態から4通りの移動をした結果を計算し, 結果を控えておく
 void project_next_states(t_game *game)
 {
-	e_move_direction dirs[]        = {MD_UP, MD_RIGHT, MD_DOWN, MD_LEFT};
-	const t_board   *current_board = &game->current_board;
-	for (unsigned int i = 0; i < ARRAY_LEN(dirs, e_move_direction); ++i) {
-		e_move_direction dir = dirs[i];
+	e_slide_direction dirs[]        = {MD_UP, MD_RIGHT, MD_DOWN, MD_LEFT};
+	const t_board    *current_board = &game->current_board;
+	for (unsigned int i = 0; i < ARRAY_LEN(dirs, e_slide_direction); ++i) {
+		e_slide_direction dir = dirs[i];
 		project_slide(current_board, dir, &game->movement_results[dir]);
 	}
 }
@@ -103,7 +103,7 @@ static score_type score_increment(const t_board *board)
 }
 
 // 移動予測から(可能な)1つ選んで, 次のターンに進む
-void advance_turn(t_game *game, e_move_direction direction)
+void advance_turn(t_game *game, e_slide_direction direction)
 {
 	t_movement_result *selected = &game->movement_results[direction];
 	game->current_board         = selected->board;

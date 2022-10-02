@@ -47,7 +47,7 @@ typedef enum {
 	MD_RIGHT = 1,
 	MD_DOWN  = 2,
 	MD_LEFT  = 3,
-} e_move_direction;
+} e_slide_direction;
 
 enum e_const {
 	WIN_VALUE = 2048,
