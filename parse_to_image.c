@@ -116,7 +116,7 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 	const unsigned int PL = (WB - WN) / 2;
 
 	// [3. 文字ごとにデータを入れていく]
-	int lsb               = get_lsb(num);
+	int lsb    = get_lsb(num);
 	img->color = lsb + 1 % 11;
 	for (int i = d - 1; 0 <= i; --i, num /= 10) {
 		int          k     = num % 10;
@@ -131,9 +131,9 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 				if (griph[di][dj] == CHAR_PIXEL_VACANT) {
 					continue;
 				}
-				unsigned int yi = PU + pi;
-				unsigned int xi = PL + i * (WD + 1) - 1 + pj;
-				img->field[yi][xi]  = '#';
+				unsigned int yi    = PU + pi;
+				unsigned int xi    = PL + i * (WD + 1) - 1 + pj;
+				img->field[yi][xi] = '#';
 			}
 		}
 	}
@@ -169,11 +169,8 @@ static bool can_display_aa(const t_board *board, const t_image_size *size)
 	return true;
 }
 
-#include <string.h>
-
 void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w)
 {
-	memset(image, 0, sizeof(t_image));
 	init_image_size(&image->size, board, w);
 	// printw("bw: [%d] bh: [%d]\n", image->size.block_width, image->size.block_height);
 
