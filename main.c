@@ -6,6 +6,7 @@
 #include "mechanics.h"
 #include "refresh_screen.h"
 #include "types.h"
+#include "time.h"
 
 #define MY_KEY_ESC 27
 
@@ -93,7 +94,8 @@ int main()
 {
 	t_game  g;
 	WINDOW *w = init_ncurses();
-	init_game(&g, 1, 4, 4);
+	init_game(&g, time(NULL), 4, 4);
+	srand(g.random_seed);
 	spawn_a_block(&g.current_board);
 	refresh_screen(&g, w);
 	while (true) {
