@@ -52,14 +52,16 @@ void print_image(const t_image *image, int width)
 	print_delim_line('-', width);
 }
 
+#define INFOMATION_SIZE 5
 int get_usable_win_width(WINDOW *w)
 {
 	int height, width;
 
 	getmaxyx(w, height, width); // errorハンドリング?
-	printw("x:[%d] y: [%d]\n", width, height);
-	int size = min_int(width / 2, height - 10) * 2;
-	return min_int(size, MAX_DISPLAY_SIZE);
+	int usable_height = max_int(0, height - INFOMATION_SIZE);
+	int usable_width  = min_int(width / 2, usable_height) * 2;
+	printw("x : [%d] y : [%d]\n", width, height);
+	return min_int(usable_width, MAX_DISPLAY_SIZE);
 }
 
 void set_wchar(t_block_image_row *row, wchar_t c, int size)
@@ -73,12 +75,12 @@ void set_payload(t_block_image_row *dest, score_type src_num, int width)
 {
 	char numstr[64];
 	int  digit;
-	if (src_num == 0) {
+	if (src_num == VACANT_BLOCK) {
 		digit = 0;
 	} else {
 		digit = ft_utoa_len(src_num, numstr, 0);
 	}
-	int left_padding_size = width >= digit ? (width - digit) / 2 : 0;
+	int left_padding_size = max_int(0, (width - digit) / 2);
 	for (int j = 0; j < digit; j++) {
 		(*dest)[left_padding_size + j] = numstr[j];
 	}
@@ -91,33 +93,29 @@ void parse_to_block_image(score_type num, t_block_image *img, const t_image_size
 	set_payload(&(*img)[line_padding_size], num, size->block_width);
 }
 
-int parse_board_to_image(const t_board *board, t_image *image, int width)
+void parse_board_to_image(const t_board *board, t_image *image, int width)
 {
 	image->size.board_width  = board->board_width;
 	image->size.board_height = board->board_height;
-	int block_width          = (width - DELIM_COUNT) / board->board_width; //小さいときhandle
-	if (block_width <= 0) {                                                // fix
-		return -1;
-	}
-	image->size.block_width  = block_width;
-	image->size.block_height = block_width / 2;
+	image->size.block_width  = max_int(0, (width - DELIM_COUNT) / board->board_width);
+	image->size.block_height = max_int(1, image->size.block_width / 2);
+	printw("bw: [%d] bh: [%d]\n", image->size.block_width, image->size.block_height);
 	for (unsigned int i = 0; i < board->board_height; i++) {
 		for (unsigned int j = 0; j < board->board_width; j++) {
 			score_type num = board->field[i][j].score;
 			parse_to_block_image(num, &image->board[i][j], &image->size);
 		}
 	}
-	return 0;
 }
 
 void refresh_screen(const t_game *game, WINDOW *w)
 {
 	t_image        image = {};
-	int            width = get_usable_win_width(w);
 	const t_board *board = &game->current_board;
 
-	parse_board_to_image(board, &image, width);
+	parse_board_to_image(board, &image, get_usable_win_width(w));
 	int line_length = image.size.block_width * board->board_width + DELIM_COUNT;
+	// printw("l : [%d]\n", line_length);
 	clear();
 	print_score(game->score, line_length);
 	print_image(&image, line_length);
