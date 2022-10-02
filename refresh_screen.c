@@ -7,7 +7,6 @@
 
 static void print_key_instructions()
 {
-
 	attrset(0 | A_UNDERLINE | A_BOLD);
 	printw("\n[INSTRUCTIONS] Arrow: slide blocks | Esc: exit\n");
 	attrset(0);
@@ -70,6 +69,7 @@ int get_line_length(const t_image_size *size)
 
 void refresh_screen(const t_game *game, WINDOW *w)
 {
+	return;
 	t_image        image;
 	const t_board *board = &game->current_board;
 	parse_board_to_image(board, &image, w);
