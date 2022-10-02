@@ -10,7 +10,7 @@ static int get_usable_win_width(WINDOW *w)
 	int height, width;
 
 	getmaxyx(w, height, width); // errorハンドリング?
-	int usable_height = max_int(0, height - INFOMATION_SIZE);
+	int usable_height = max_int(0, height - 1 - INFOMATION_SIZE);
 	int usable_width  = min_int(width / 2 - 1, usable_height) * 2;
 	//-1がないと何故か崩れるわけわからん
 	// printw("x : [%d] y : [%d]\n", width, height);
