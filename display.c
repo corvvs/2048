@@ -74,16 +74,14 @@ void set_wchar(t_block_image_row *row, wchar_t c, int size)
 
 void set_payload(t_block_image_row *dest, score_type src_num, int width)
 {
-	char numstr[64];
-	int  digit;
 	if (src_num == VACANT_BLOCK) {
-		digit = 0;
-	} else {
-		digit = ft_utoa_len(src_num, numstr, 0);
+		return;
 	}
-	int left_padding_size = max_int(0, (width - digit) / 2);
-	for (int j = 0; j < digit; j++) {
-		(*dest)[left_padding_size + j] = numstr[j];
+	char numstr[64];
+	int  digit             = ft_utoa_len(src_num, numstr, 0);
+	int  left_padding_size = max_int(0, (width - digit) / 2);
+	for (int i = 0; i < digit; i++) {
+		(*dest)[left_padding_size + i] = numstr[i];
 	}
 }
 
