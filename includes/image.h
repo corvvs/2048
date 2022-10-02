@@ -6,8 +6,16 @@
 #define MAX_BLOCK_IMAGE_SIZE 200
 #define MAX_DISPLAY_SIZE MAX_BLOCK_IMAGE_SIZE *MAX_GAME_SIZE
 
+typedef int t_color_pair_id;
+
 typedef wchar_t           t_block_image_row[MAX_BLOCK_IMAGE_SIZE];
-typedef t_block_image_row t_block_image[MAX_BLOCK_IMAGE_SIZE];
+typedef t_block_image_row t_block_image_field[MAX_BLOCK_IMAGE_SIZE];
+
+typedef struct s_block_image {
+	t_color_pair_id     color;
+	t_block_image_field field;
+} t_block_image;
+
 typedef t_block_image     t_board_image_row[MAX_GAME_SIZE];
 typedef t_board_image_row t_board_image[MAX_GAME_SIZE];
 

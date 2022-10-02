@@ -1,3 +1,4 @@
+#include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -17,4 +18,17 @@ int min_int(int a, int b)
 int max_int(int a, int b)
 {
 	return a > b ? a : b;
+}
+
+int get_lsb(uint64_t n)
+{
+	int i = 1;
+	while (n) {
+		if (n & 1) {
+			return i;
+		}
+		n >>= 1;
+		i++;
+	}
+	return 0;
 }

@@ -30,7 +30,20 @@ static void set_payload(t_block_image_row *dest, score_type src_num, int width)
 static void parse_to_block_image_text(score_type num, t_block_image *img, const t_image_size *size)
 {
 	int line_padding_size = size->block_height / 2;
-	set_payload(&(*img)[line_padding_size], num, size->block_width);
+	int lsb               = get_lsb(num);
+
+	img->color = lsb + 1 % 11;
+	set_payload(&img->field[line_padding_size], num, size->block_width);
+}
+
+void init_image_size(t_image_size *size, const t_board *board, WINDOW *w)
+{
+	int width          = get_usable_win_width(w);
+	int delim_count    = board->board_width + 1;
+	size->board_width  = board->board_width;
+	size->board_height = board->board_height;
+	size->block_width  = max_int(0, (width - delim_count) / board->board_width);
+	size->block_height = max_int(1, size->block_width / 2);
 }
 
 #define MINIMUM_DIGIT_HEIGHT_FOR_AA 5
@@ -103,6 +116,8 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 	const unsigned int PL = (WB - WN) / 2;
 
 	// [3. 文字ごとにデータを入れていく]
+	int lsb    = get_lsb(num);
+	img->color = lsb + 1 % 11;
 	for (int i = d - 1; 0 <= i; --i, num /= 10) {
 		int          k     = num % 10;
 		const char **griph = digit_griphs[k];
@@ -116,9 +131,9 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 				if (griph[di][dj] == CHAR_PIXEL_VACANT) {
 					continue;
 				}
-				unsigned int yi = PU + pi;
-				unsigned int xi = PL + i * (WD + 1) - 1 + pj;
-				(*img)[yi][xi]  = '#';
+				unsigned int yi    = PU + pi;
+				unsigned int xi    = PL + i * (WD + 1) - 1 + pj;
+				img->field[yi][xi] = '#';
 			}
 		}
 	}
@@ -152,16 +167,6 @@ static bool can_display_aa(const t_board *board, const t_image_size *size)
 		return false;
 	}
 	return true;
-}
-
-void init_image_size(t_image_size *size, const t_board *board, WINDOW *w)
-{
-	int width          = get_usable_win_width(w);
-	int delim_count    = board->board_width + 1;
-	size->board_width  = board->board_width;
-	size->board_height = board->board_height;
-	size->block_width  = max_int(0, (width - delim_count) / board->board_width);
-	size->block_height = max_int(1, size->block_width / 2);
 }
 
 void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w)

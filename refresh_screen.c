@@ -7,13 +7,17 @@
 
 static void print_key_instructions()
 {
+	attrset(0 | A_UNDERLINE | A_BOLD);
 	printw("\n[INSTRUCTIONS] Arrow: slide blocks | Esc: exit\n");
+	attrset(0);
 }
 
 static void print_score(score_type score, int width)
 {
 	(void)width;
+	attrset(0 | A_UNDERLINE | A_BOLD);
 	printw("score : %ld\n", score);
+	attrset(0);
 }
 
 static void print_delim_line(wchar_t delim, int width)
@@ -41,7 +45,10 @@ static void print_board_row(const t_board_image_row *board_row, const t_image_si
 	for (int i = 0; i < size->block_height; i++) {
 		for (int j = 0; j < size->board_width; j++) {
 			printw("|");
-			print_block_row(&(*board_row)[j][i], size);
+			t_color_pair_id color = (*board_row)[j].color;
+			attrset(COLOR_PAIR(color) | A_BOLD);
+			print_block_row(&(*board_row)[j].field[i], size);
+			attrset(0);
 		}
 		printw("|");
 		printw("\n");
