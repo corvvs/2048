@@ -94,6 +94,6 @@ void refresh_screen2(const t_game *game, WINDOW *w)
 	int line_length = get_line_length(&image.size);
 	// printw("l : [%d]\n", line_length);
 	clear();
-	print_score(game->score, line_length);
+	print_score(game, line_length);
 	print_image(&image, line_length);
 }
