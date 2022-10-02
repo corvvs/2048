@@ -7,13 +7,18 @@
 
 static void print_key_instructions()
 {
+
+	attrset(0 | A_UNDERLINE | A_BOLD);
 	printw("\n[INSTRUCTIONS] Arrow: slide blocks | Esc: exit\n");
+	attrset(0);
 }
 
 static void print_score(score_type score, int width)
 {
 	(void)width;
+	attrset(0 | A_UNDERLINE | A_BOLD);
 	printw("score : %ld\n", score);
+	attrset(0);
 }
 
 static void print_delim_line(wchar_t delim, int width)
@@ -74,4 +79,5 @@ void refresh_screen(const t_game *game, WINDOW *w)
 	print_score(game->score, line_length);
 	print_image(&image, line_length);
 	print_key_instructions();
+	attrset(0);
 }

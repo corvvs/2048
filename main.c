@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <time.h>
 
-#include "types.h"
 #include "board.h"
 #include "game.h"
 #include "image.h"
@@ -23,6 +22,7 @@ WINDOW *init_ncurses()
 	noecho();
 	curs_set(0);
 	keypad(stdscr, TRUE);
+	start_color();
 	return w;
 }
 
@@ -112,7 +112,9 @@ static int ask_yn()
 
 static bool ask_for_exit()
 {
+	attrset(0 | A_UNDERLINE | A_BOLD);
 	printw("YOU WIN! continue ? y/n\n");
+	attrset(0 | A_BOLD);
 	return ask_yn() == 'n';
 }
 
