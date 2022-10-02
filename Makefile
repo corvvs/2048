@@ -36,7 +36,7 @@ $(NAME)	: $(OBJS)
 clean: FORCE
 	rm -rf $(OBJDIR)
 
-fclean: clean test-fclean
+fclean: clean
 	rm -f $(NAME) $(B_NAME)
 
 .PHONY: re
@@ -49,5 +49,3 @@ build-fortest: $(OBJS) FORCE
 
 cpp:
 	make build-fortest CC=clang++ OBJDIR=./obj-cpp "CFLAGS=$(CFLAGS) -Wno-deprecated"
-
--include test.mk
