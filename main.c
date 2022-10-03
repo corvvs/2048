@@ -55,6 +55,9 @@ void create_colors()
 WINDOW *init_ncurses()
 {
 	WINDOW *w = initscr();
+	if (w == NULL) {
+		return NULL;
+	}
 	timeout(-1);
 	noecho();
 	curs_set(0);
@@ -179,14 +182,9 @@ static bool losing_reaction(t_game *g, WINDOW *w)
 	return true;
 }
 
-static void game_loop(t_game *g)
+static void game_loop(t_game *g, WINDOW *w)
 {
-	WINDOW *w = init_ncurses();
-	if (w == NULL) {
-		return;
-	}
 	print_menu(w);
-	srand(g->random_seed);
 	spawn_a_block(&g->current_board);
 	while (true) {
 		spawn_a_block(&g->current_board);
@@ -213,6 +211,16 @@ static void game_loop(t_game *g)
 			}
 		}
 	}
+}
+
+static void run_game(t_game *g)
+{
+	WINDOW *w = init_ncurses();
+	if (w == NULL) {
+		return;
+	}
+	srand(g->random_seed);
+	game_loop(g, w);
 	t_image image = create_result_image(&g->current_board, w);
 	endwin();
 	print_result(&image, g->score);
@@ -251,5 +259,5 @@ int main(int argc, char **argv)
 	size_t height = get_game_height(argc, argv);
 	size_t width  = get_game_width(argc, argv);
 	init_game(&g, time(NULL), height, width);
-	game_loop(&g);
+	run_game(&g);
 }
