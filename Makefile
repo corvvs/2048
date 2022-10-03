@@ -6,7 +6,11 @@ CXX		:= clang++
 CC		:= cc
 CFLAGS	:= -Wall -Werror -Wextra -MMD -MP
 
+ifeq ($(shell uname),Linux)
 LIBS	= -lncursesw
+else
+LIBS	= -lncurses
+endif
 
 SRCDIR	:= srcs
 OBJDIR	:= ./obj
