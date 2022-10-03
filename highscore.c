@@ -79,7 +79,7 @@ void set_highscore(score_type score)
 	if (high_score != SCORE_UNAVAILABLE && high_score >= score) {
 		return;
 	}
-	int fd = open(FILENAME_HIGHSCORE, O_WRONLY | O_CREAT | O_TRUNC);
+	int fd = open(FILENAME_HIGHSCORE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0) {
 		return;
 	}
