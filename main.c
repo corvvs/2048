@@ -20,7 +20,7 @@
 static void wait_any_key_input(t_game *g, WINDOW *w)
 {
 	while (true) {
-		refresh_screen2(g, w);
+		refresh_screen(g, w);
 		attrset(0 | A_UNDERLINE | A_BOLD);
 		printw("Press any key to start game !\n");
 		if (getch() == KEY_RESIZE) {
@@ -106,7 +106,7 @@ static int get_keych()
 static bool key_reaction(t_game *g, WINDOW *w)
 {
 	while (true) {
-		refresh_screen(g, w);
+		refresh_screen_with_key_info(g, w);
 		int c = get_keych();
 		switch (c) {
 		case MY_KEY_ESC:
@@ -134,7 +134,7 @@ static bool key_reaction(t_game *g, WINDOW *w)
 
 static int ask_continue(t_game *g, WINDOW *w)
 {
-	refresh_screen2(g, w);
+	refresh_screen(g, w);
 	attrset(0 | A_UNDERLINE | A_BOLD);
 	printw("YOU WIN! continue ? y/n\n");
 	attrset(0 | A_BOLD);
@@ -143,7 +143,7 @@ static int ask_continue(t_game *g, WINDOW *w)
 		flushinp();
 		switch (c) {
 		case KEY_RESIZE:
-			refresh_screen2(g, w);
+			refresh_screen(g, w);
 			attrset(0 | A_UNDERLINE | A_BOLD);
 			printw("YOU WIN! continue ? y/n\n");
 			attrset(0 | A_BOLD);
@@ -175,7 +175,7 @@ static bool losing_reaction(t_game *g, WINDOW *w)
 		return false;
 	}
 	// まけ
-	refresh_screen(g, w);
+	refresh_screen_with_key_info(g, w);
 	return true;
 }
 

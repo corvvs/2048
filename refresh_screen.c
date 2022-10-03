@@ -83,17 +83,10 @@ void refresh_screen(const t_game *game, WINDOW *w)
 	clear();
 	print_score(game, line_length);
 	print_image(&image, line_length);
-	print_key_instructions();
 }
 
-void refresh_screen2(const t_game *game, WINDOW *w)
+void refresh_screen_with_key_info(const t_game *game, WINDOW *w)
 {
-	t_image        image = {};
-	const t_board *board = &game->current_board;
-	parse_board_to_image(board, &image, w);
-	int line_length = get_line_length(&image.size);
-	// printw("l : [%d]\n", line_length);
-	clear();
-	print_score(game, line_length);
-	print_image(&image, line_length);
+	refresh_screen(game, w);
+	print_key_instructions();
 }
