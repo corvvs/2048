@@ -7,9 +7,9 @@
 typedef union {
 	wchar_t w;
 	struct {
-		uint32_t first_lower : 6;
-		uint32_t first_upper : 2;
-		uint32_t second_lower : 3;
+		uint32_t first_lower   : 6;
+		uint32_t first_upper   : 2;
+		uint32_t second_lower  : 3;
 		uint32_t second_unused : 5;
 	};
 } t_utf8_2;
@@ -17,8 +17,8 @@ typedef union {
 typedef union {
 	wchar_t w;
 	struct {
-		uint32_t first_lower : 6;
-		uint32_t first_upper : 2;
+		uint32_t first_lower  : 6;
+		uint32_t first_upper  : 2;
 		uint32_t second_lower : 4;
 		uint32_t second_upper : 4;
 	};
@@ -27,12 +27,12 @@ typedef union {
 typedef union {
 	wchar_t w;
 	struct {
-		uint32_t first_lower : 6;
-		uint32_t first_upper : 2;
+		uint32_t first_lower  : 6;
+		uint32_t first_upper  : 2;
 		uint32_t second_lower : 4;
 		uint32_t second_upper : 4;
-		uint32_t third_lower : 2;
-		uint32_t third_upper : 3;
+		uint32_t third_lower  : 2;
+		uint32_t third_upper  : 3;
 		uint32_t third_unused : 3;
 	};
 } t_utf8_4;

@@ -22,4 +22,4 @@ BraceWrapping:
   AfterFunction: true
   SplitEmptyFunction: false
   AfterNamespace: true 
-
+AlignConsecutiveBitFields: true
