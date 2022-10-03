@@ -161,7 +161,6 @@ static bool winning_reaction(t_game *g, WINDOW *w)
 		return false;
 	}
 	// かち
-	// TODO: 勝った時の処理
 	// ↓続行を選んだ場合はフラグをセットして続行
 	g->has_won = true;
 	return ask_continue(g, w) == 'n';
@@ -175,7 +174,6 @@ static bool losing_reaction(t_game *g, WINDOW *w)
 	}
 	// まけ
 	refresh_screen(g, w);
-	// TODO: 負けた時の処理
 	return true;
 }
 
