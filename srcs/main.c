@@ -3,12 +3,12 @@
 #include <time.h>
 
 #include "board.h"
+#include "ft_utils.h"
 #include "game.h"
 #include "image.h"
 #include "parse_to_image.h"
 #include "print_result.h"
 #include "types.h"
-#include "ft_utils.h"
 
 static size_t get_game_height(int argc, char **argv)
 {
@@ -36,7 +36,7 @@ static size_t get_game_width(int argc, char **argv)
 
 static void create_colors()
 {
-	const int offset = 15;
+	const int offset    = 15;
 	const int log2_2048 = get_lsb(2048) - 1;
 	for (int i = 1; i <= log2_2048; i++) {
 		int r = i * (255 / log2_2048);

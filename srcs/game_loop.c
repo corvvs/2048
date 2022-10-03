@@ -2,13 +2,13 @@
 #include <stdbool.h>
 
 #include "board.h"
+#include "ft_utils.h"
 #include "game.h"
 #include "image.h"
 #include "mechanics.h"
 #include "parse_to_image.h"
 #include "refresh_screen.h"
 #include "types.h"
-#include "ft_utils.h"
 
 #define MY_KEY_EOT 4
 #define MY_KEY_ESC 27

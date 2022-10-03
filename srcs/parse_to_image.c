@@ -63,7 +63,8 @@ static unsigned int get_digits_num(score_type n)
 	return d;
 }
 
-static double block_scale_factor(score_type num, const t_image_size *size) {
+static double block_scale_factor(score_type num, const t_image_size *size)
+{
 	const double HB      = size->block_height;
 	const double WB      = size->block_width;
 	const double HF      = MINIMUM_DIGIT_HEIGHT_FOR_AA;
@@ -76,7 +77,8 @@ static double block_scale_factor(score_type num, const t_image_size *size) {
 	return sf;
 }
 
-static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_image_size *size, double sf)
+static void
+parse_to_block_image_aa(score_type num, t_block_image *img, const t_image_size *size, double sf)
 {
 	// <<AA描画アルゴリズム>>
 	//
@@ -109,11 +111,11 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 	// - s >= 1
 	// 実際の s は, これらの不等式を全て満たす最大の整数となる.
 
-	const double HB      = size->block_height;
-	const double WB      = size->block_width;
-	const double HF      = MINIMUM_DIGIT_HEIGHT_FOR_AA;
-	const double WF      = MINIMUM_DIGIT_WIDTH_FOR_AA;
-	const int    d       = get_digits_num(num);
+	const double HB = size->block_height;
+	const double WB = size->block_width;
+	const double HF = MINIMUM_DIGIT_HEIGHT_FOR_AA;
+	const double WF = MINIMUM_DIGIT_WIDTH_FOR_AA;
+	const int    d  = get_digits_num(num);
 	// スケールファクター in unsigned int
 	// unsigned int sfi = sf;
 	sf = (double)(unsigned int)(2 * sf) / 2;
@@ -130,7 +132,7 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 	int lsb    = get_lsb(num);
 	img->color = (lsb + 1) % 11;
 	for (int i = d - 1; 0 <= i; --i, num /= 10) {
-		int          k     = num % 10;
+		int                    k     = num % 10;
 		const t_aa_char_type **griph = digit_griphs[k];
 		// printw("i = %d, k = %d, griph = %p\n", i, k, griph);
 		for (unsigned int pi = 0; pi < HD; ++pi) {
@@ -162,7 +164,7 @@ void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w)
 				// 何も書かない
 				continue;
 			}
-			double sf = block_scale_factor(num, &image->size);
+			double     sf                 = block_scale_factor(num, &image->size);
 			const bool display_nums_in_aa = sf >= 1;
 			if (display_nums_in_aa) {
 				parse_to_block_image_aa(num, &image->board[i][j], &image->size, sf);

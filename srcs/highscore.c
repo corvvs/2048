@@ -3,8 +3,8 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <stdbool.h>
-#include <unistd.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #define FILENAME_HIGHSCORE "./.highscore.2048"
 #define SCORE_MAX UINT64_MAX

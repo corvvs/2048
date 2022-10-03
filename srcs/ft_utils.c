@@ -38,20 +38,15 @@ int get_lsb(uint64_t n)
 
 void ft_putwchar_fd(int fd, wchar_t wc)
 {
-	if (wc <= 0x7F ){
+	if (wc <= 0x7F) {
 		write(fd, &wc, 1);
-	} else if (wc <= 0x7ff)
-	{
+	} else if (wc <= 0x7ff) {
 		uint32_t c = encode_2bytes_utf8(wc);
 		write(fd, &c, 2);
-	}
-	else if (wc <= 0xffff)
-	{
+	} else if (wc <= 0xffff) {
 		uint32_t c = encode_3bytes_utf8(wc);
 		write(fd, &c, 3);
-	}
-	else if (wc <= 0x10ffff)
-	{
+	} else if (wc <= 0x10ffff) {
 		uint32_t c = encode_4bytes_utf8(wc);
 		write(fd, &c, 4);
 	}

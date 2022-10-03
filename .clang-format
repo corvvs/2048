@@ -1,0 +1,25 @@
+BasedOnStyle: LLVM
+UseTab: ForContinuationAndIndentation
+IndentWidth: 4
+TabWidth: 4
+AllowShortFunctionsOnASingleLine: Empty
+IndentCaseLabels: false
+NamespaceIndentation: All
+BreakConstructorInitializers: BeforeColon
+AlwaysBreakTemplateDeclarations: Yes
+SpacesInAngles: Leave
+ColumnLimit: 100
+AlignAfterOpenBracket: BlockIndent
+BinPackArguments: false
+BinPackParameters: false
+PackConstructorInitializers: NextLine
+AllowShortEnumsOnASingleLine: false
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterFunction: true
+  SplitEmptyFunction: false
+  AfterNamespace: true 
+
