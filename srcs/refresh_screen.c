@@ -12,23 +12,14 @@ static void print_key_instructions()
 	attrset(0);
 }
 
-static void print_score(const t_game *game, int width)
+static void print_score(const t_game *game)
 {
-	(void)width;
 	attrset(0 | A_UNDERLINE | A_BOLD);
 #ifdef BONUS
 	printw("high : %ld ", game->high_score);
 #endif
 	printw("score : %ld\n", game->score);
 	attrset(0);
-}
-
-static void print_delim_line(wchar_t delim, int width)
-{
-	for (int i = 0; i < width; i++) {
-		printw("%lc", delim);
-	}
-	printw("\n");
 }
 
 static void print_block_row(const t_block_image_row *block_row, const t_image_size *size)
@@ -43,29 +34,61 @@ static void print_block_row(const t_block_image_row *block_row, const t_image_si
 	}
 }
 
+#ifndef BONUS
+#define VERTICAL_DELIM L'|'
+#else
+#define VERTICAL_DELIM L'┃'
+#endif
 static void print_board_row(const t_board_image_row *board_row, const t_image_size *size)
 {
 	for (int i = 0; i < size->block_height; i++) {
 		for (int j = 0; j < size->board_width; j++) {
-			printw("|");
+			printw("%lc", VERTICAL_DELIM);
 			t_color_pair_id color = (*board_row)[j].color;
 			attrset(COLOR_PAIR(color) | A_BOLD);
 			print_block_row(&(*board_row)[j].field[i], size);
 			attrset(0);
 		}
-		printw("|");
-		printw("\n");
+		printw("%lc\n", VERTICAL_DELIM);
 	}
 }
 
-static void print_image(const t_image *image, int width)
+static void print_delim_line(wchar_t delim[4], const t_image_size *size)
 {
+	printw("%lc", delim[0]);
+	for (int i = 0; i < size->board_width; i++) {
+		if (i != 0)
+			printw("%lc", delim[2]);
+		for (int j = 0; j < size->block_width; j++) {
+			printw("%lc", delim[1]);
+		}
+	}
+	printw("%lc\n", delim[3]);
+}
+
+#ifndef BONUS
+static void print_image(const t_image *image)
+{
+	print_delim_line(L"----", &image->size);
 	for (int i = 0; i < image->size.board_height; i++) {
-		print_delim_line('-', width);
+		if (i != 0)
+			print_delim_line(L"----", &image->size);
 		print_board_row(&image->board[i], &image->size);
 	}
-	print_delim_line('-', width);
+	print_delim_line(L"----", &image->size);
 }
+#else
+static void print_image(const t_image *image)
+{
+	print_delim_line(L"┏━┳┓", &image->size);
+	for (int i = 0; i < image->size.board_height; i++) {
+		if (i != 0)
+			print_delim_line(L"┣━╋┫", &image->size);
+		print_board_row(&image->board[i], &image->size);
+	}
+	print_delim_line(L"┗━┻┛", &image->size);
+}
+#endif
 
 int get_line_length(const t_image_size *size)
 {
@@ -78,11 +101,10 @@ void refresh_screen(const t_game *game, WINDOW *w)
 	t_image        image = {};
 	const t_board *board = &game->current_board;
 	parse_board_to_image(board, &image, w);
-	int line_length = get_line_length(&image.size);
 	// printw("l : [%d]\n", line_length);
 	clear();
-	print_score(game, line_length);
-	print_image(&image, line_length);
+	print_score(game);
+	print_image(&image);
 }
 
 void refresh_screen_with_key_info(const t_game *game, WINDOW *w)
