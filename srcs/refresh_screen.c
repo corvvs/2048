@@ -35,9 +35,9 @@ static void print_block_row(const t_block_image_row *block_row, const t_image_si
 }
 
 #ifndef BONUS
-#define VERTICAL_DELIM L'|'
+  #define VERTICAL_DELIM L'|'
 #else
-#define VERTICAL_DELIM L'┃'
+  #define VERTICAL_DELIM L'┃'
 #endif
 static void print_board_row(const t_board_image_row *board_row, const t_image_size *size)
 {

@@ -23,3 +23,5 @@ BraceWrapping:
   SplitEmptyFunction: false
   AfterNamespace: true 
 AlignConsecutiveBitFields: true
+PPIndentWidth: 2
+IndentPPDirectives: BeforeHash

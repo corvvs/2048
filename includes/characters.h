@@ -5,12 +5,12 @@
 #define FONT_WIDTH 5
 
 #ifndef BONUS
-#define CHAR_PIXEL_VACANT ' '
-#define AA_BLOCK_CHAR '#'
+  #define CHAR_PIXEL_VACANT ' '
+  #define AA_BLOCK_CHAR '#'
 typedef char t_aa_char_type;
 #else
-#define CHAR_PIXEL_VACANT L' '
-#define AA_BLOCK_CHAR L'█'
+  #define CHAR_PIXEL_VACANT L' '
+  #define AA_BLOCK_CHAR L'█'
 typedef wchar_t t_aa_char_type;
 #endif
 
