@@ -34,7 +34,7 @@ void print_menu(WINDOW *w)
 {
 	t_game g;
 	init_game(&g, 1, 1, 1);
-	g.current_board.field[0][0].score = 2048;
+	g.current_board.field[0][0].score = WIN_VALUE;
 	wait_any_key_input(&g, w);
 }
 
