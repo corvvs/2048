@@ -10,6 +10,7 @@
 #include "print_result.h"
 #include "refresh_screen.h"
 #include "types.h"
+#include "ft_utils.h"
 
 #define MY_KEY_EOT 4
 #define MY_KEY_ESC 27
@@ -40,9 +41,10 @@ void print_menu(WINDOW *w)
 
 void create_colors()
 {
-	int offset = 15;
-	for (int i = 1; i <= 11; i++) {
-		int r = i * (255 / 11);
+	const int offset = 15;
+	const int log2_2048 = get_lsb(2048) - 1;
+	for (int i = 1; i <= log2_2048; i++) {
+		int r = i * (255 / log2_2048);
 		init_color(offset + i, r, 0, 0);
 		init_pair(i, COLOR_WHITE, offset + i);
 		// attrset(COLOR_PAIR(i) | A_BOLD);
