@@ -63,7 +63,20 @@ static unsigned int get_digits_num(score_type n)
 	return d;
 }
 
-static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_image_size *size)
+static double block_scale_factor(score_type num, const t_image_size *size) {
+	const double HB      = size->block_height;
+	const double WB      = size->block_width;
+	const double HF      = MINIMUM_DIGIT_HEIGHT_FOR_AA;
+	const double WF      = MINIMUM_DIGIT_WIDTH_FOR_AA;
+	const int    d       = get_digits_num(num);
+	const double s_sup_h = (HB - 2) / HF;
+	const double s_sup_w = (WB - 1 - d) / (WF * d);
+	// スケールファクター in double
+	double sf = (s_sup_h > s_sup_w) ? s_sup_w : s_sup_h;
+	return sf;
+}
+
+static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_image_size *size, double sf)
 {
 	// <<AA描画アルゴリズム>>
 	//
@@ -101,16 +114,13 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 	const double HF      = MINIMUM_DIGIT_HEIGHT_FOR_AA;
 	const double WF      = MINIMUM_DIGIT_WIDTH_FOR_AA;
 	const int    d       = get_digits_num(num);
-	const double s_sup_h = (HB - 2) / HF;
-	const double s_sup_w = (WB - 1 - d) / (WF * d);
-	// スケールファクター in double
-	double sf = (s_sup_h > s_sup_w) ? s_sup_w : s_sup_h;
 	// スケールファクター in unsigned int
-	unsigned int sfi = sf;
+	// unsigned int sfi = sf;
+	sf = (double)(unsigned int)(2 * sf) / 2;
 
 	// [2. 文字の基準位置の決定]
-	const unsigned int HD = HF * sfi;
-	const unsigned int WD = WF * sfi;
+	const unsigned int HD = HF * sf;
+	const unsigned int WD = WF * sf;
 	const unsigned int HN = HD;
 	const unsigned int WN = WD * d;
 	const unsigned int PU = (HB - HN) / 2;
@@ -125,8 +135,8 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 		// printw("i = %d, k = %d, griph = %p\n", i, k, griph);
 		for (unsigned int pi = 0; pi < HD; ++pi) {
 			for (unsigned int pj = 0; pj < WD; ++pj) {
-				unsigned int di = pi / sfi;
-				unsigned int dj = pj / sfi;
+				unsigned int di = pi / sf;
+				unsigned int dj = pj / sf;
 				// printw("(pi, pj) = (%d, %d), (di, dj) = (%d, %d), c = '%c'\n", pi, pj, di, dj,
 				// griph[di][dj]);
 				if (griph[di][dj] == CHAR_PIXEL_VACANT) {
@@ -140,42 +150,10 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 	}
 }
 
-static score_type get_max_num(const t_board *board)
-{
-	score_type max_num = VACANT_BLOCK;
-	for (size_t i = 0; i < board->board_height; i++) {
-		for (size_t j = 0; j < board->board_width; j++) {
-			score_type num = board->field[i][j].score;
-			if (num > max_num) {
-				max_num = num;
-			}
-		}
-	}
-	return max_num;
-}
-
-static bool can_display_aa(const t_board *board, const t_image_size *size)
-{
-	// [数字をAA表示する条件]
-	// - ブロックの高さが 1 + 5 + 1 = 7 以上であること
-	// - ブロックの幅が, 「今ある最大の数の桁数」 * (1 + 3) + 1 以上であること
-	if (size->block_height < 1 + MINIMUM_DIGIT_HEIGHT_FOR_AA + 1) {
-		return false;
-	}
-	const score_type max_num    = get_max_num(board);
-	int              digits_num = get_digits_num(max_num);
-	if (size->block_width < digits_num * (MINIMUM_DIGIT_WIDTH_FOR_AA + 1) + 1) {
-		return false;
-	}
-	return true;
-}
-
 void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w)
 {
 	init_image_size(&image->size, board, w);
 	printw("bw: [%d] bh: [%d]\n", image->size.block_width, image->size.block_height);
-
-	const bool display_nums_in_aa = can_display_aa(board, &image->size);
 
 	for (size_t i = 0; i < board->board_height; i++) {
 		for (size_t j = 0; j < board->board_width; j++) {
@@ -184,8 +162,10 @@ void parse_board_to_image(const t_board *board, t_image *image, WINDOW *w)
 				// 何も書かない
 				continue;
 			}
+			double sf = block_scale_factor(num, &image->size);
+			const bool display_nums_in_aa = sf >= 1;
 			if (display_nums_in_aa) {
-				parse_to_block_image_aa(num, &image->board[i][j], &image->size);
+				parse_to_block_image_aa(num, &image->board[i][j], &image->size, sf);
 			} else {
 				parse_to_block_image_text(num, &image->board[i][j], &image->size);
 			}
