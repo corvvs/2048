@@ -7,12 +7,6 @@
 #include "parse_to_image.h"
 #include "types.h"
 
-#ifdef __linux__
-#define UINT64_FMT "lu"
-#else
-#define UINT64_FMT "llu"
-#endif
-
 static size_t ft_strlen(const char *str)
 {
 	size_t n = 0;
@@ -27,12 +21,6 @@ static void ft_putstr(const char *str)
 	write(STDOUT_FILENO, str, ft_strlen(str));
 }
 
-static void ft_putwchar(wchar_t wc)
-{
-	char c = wc;
-	write(STDOUT_FILENO, &c, 1);
-}
-
 static void print_score(score_type score)
 {
 	ft_putstr("score : ");
@@ -44,22 +32,14 @@ static void print_score(score_type score)
 	ft_putstr("\n");
 }
 
-static void print_delim_line(wchar_t delim, int width)
-{
-	for (int i = 0; i < width; i++) {
-		ft_putwchar(delim);
-	}
-	ft_putstr("\n");
-}
-
 static void print_block_row(const t_block_image_row *block_row, const t_image_size *size)
 {
 	for (int i = 0; i < size->block_width; i++) {
 		wchar_t c = (*block_row)[i];
 		if (c) {
-			ft_putwchar(c);
+			ft_putwchar_fd(1, c);
 		} else {
-			ft_putwchar(' ');
+			ft_putwchar_fd(1, ' ');
 		}
 	}
 }
@@ -68,26 +48,41 @@ static void print_board_row(const t_board_image_row *board_row, const t_image_si
 {
 	for (int i = 0; i < size->block_height; i++) {
 		for (int j = 0; j < size->board_width; j++) {
-			ft_putstr("|");
+			ft_putwchar_fd(1, L'┃');
 			print_block_row(&(*board_row)[j].field[i], size);
 		}
-		ft_putstr("|");
-		ft_putstr("\n");
+		ft_putwchar_fd(1, L'┃');
+		ft_putwchar_fd(1, L'\n');
 	}
 }
 
-static void print_image(const t_image *image, int width)
+static void print_delim_line(wchar_t delim[4], const t_image_size *size)
 {
+	ft_putwchar_fd(1, delim[0]);
+	for (int i = 0; i < size->board_width; i++) {
+		if (i != 0)
+			ft_putwchar_fd(1, delim[2]);
+		for (int j = 0; j < size->block_width; j++) {
+			ft_putwchar_fd(1, delim[1]);
+		}
+	}
+	ft_putwchar_fd(1, delim[3]);
+	ft_putwchar_fd(1, L'\n');
+}
+
+static void print_image(const t_image *image)
+{
+	print_delim_line(L"┏━┳┓", &image->size);
 	for (int i = 0; i < image->size.board_height; i++) {
-		print_delim_line('-', width);
+		if (i != 0)
+			print_delim_line(L"┣━╋┫", &image->size);
 		print_board_row(&image->board[i], &image->size);
 	}
-	print_delim_line('-', width);
+	print_delim_line(L"┗━┻┛", &image->size);
 }
 
 void print_result(const t_image *img, score_type score)
 {
-	int line_length = get_line_length(&img->size);
 	print_score(score);
-	print_image(img, line_length);
+	print_image(img);
 }
