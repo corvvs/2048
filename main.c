@@ -226,9 +226,6 @@ static void run_game(t_game *g)
 	print_result(&image, g->score);
 }
 
-#include <limits.h>
-#include <unistd.h>
-
 static size_t get_game_height(int argc, char **argv)
 {
 	if (argc < 2) {
