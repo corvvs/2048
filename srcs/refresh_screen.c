@@ -90,12 +90,6 @@ static void print_image(const t_image *image)
 }
 #endif
 
-int get_line_length(const t_image_size *size)
-{
-	int delim_count = size->board_width + 1;
-	return size->block_width * size->board_width + delim_count;
-}
-
 void refresh_screen(const t_game *game, WINDOW *w)
 {
 	t_image        image = {};
