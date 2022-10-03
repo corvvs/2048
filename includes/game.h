@@ -5,5 +5,6 @@
 
 void init_game(t_game *game, unsigned int random_seed, size_t game_width, size_t game_height);
 bool is_game_attribute_consistent(t_game *game);
+void game_loop(t_game *g, WINDOW *w);
 
 #endif
