@@ -77,8 +77,9 @@ static void run_game(t_game *g)
 #include <locale.h>
 int main(int argc, char **argv)
 {
-	setlocale(LC_ALL, "" );
-
+#ifdef BONUS
+	setlocale(LC_ALL, "");
+#endif
 	t_game g;
 	size_t height = get_game_height(argc, argv);
 	size_t width  = get_game_width(argc, argv);
