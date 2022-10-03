@@ -32,7 +32,7 @@ static void parse_to_block_image_text(score_type num, t_block_image *img, const 
 	int line_padding_size = size->block_height / 2;
 	int lsb               = get_lsb(num);
 
-	img->color = lsb + 1 % 11;
+	img->color = (lsb + 1) % 11;
 	set_payload(&img->field[line_padding_size], num, size->block_width);
 }
 
