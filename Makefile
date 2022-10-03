@@ -6,7 +6,7 @@ CXX		:= clang++
 CC		:= cc
 CFLAGS	:= -Wall -Werror -Wextra -MMD -MP
 
-LIBS	= -lncurses
+LIBS	= -lncursesw
 
 SRCDIR	:= srcs
 OBJDIR	:= ./obj

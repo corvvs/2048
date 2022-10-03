@@ -134,7 +134,7 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 				}
 				unsigned int yi    = PU + pi;
 				unsigned int xi    = PL + i * (WD + 1) - 1 + pj;
-				img->field[yi][xi] = '#';
+				img->field[yi][xi] = L'█';
 			}
 		}
 	}
