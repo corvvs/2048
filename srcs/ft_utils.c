@@ -1,6 +1,9 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <unistd.h>
+
+#include "ft_utf8.h"
 
 int ft_utoa_len(uint64_t n, char *s, int len)
 {
@@ -31,4 +34,25 @@ int get_lsb(uint64_t n)
 		i++;
 	}
 	return 0;
+}
+
+void ft_putwchar_fd(int fd, wchar_t wc)
+{
+	if (wc <= 0x7F ){
+		write(fd, &wc, 1);
+	} else if (wc <= 0x7ff)
+	{
+		uint32_t c = encode_2bytes_utf8(wc);
+		write(fd, &c, 2);
+	}
+	else if (wc <= 0xffff)
+	{
+		uint32_t c = encode_3bytes_utf8(wc);
+		write(fd, &c, 3);
+	}
+	else if (wc <= 0x10ffff)
+	{
+		uint32_t c = encode_4bytes_utf8(wc);
+		write(fd, &c, 4);
+	}
 }
