@@ -1,25 +1,22 @@
 #include <ncurses.h>
 #include <stdbool.h>
-#include <time.h>
 
 #include "board.h"
 #include "game.h"
 #include "image.h"
 #include "mechanics.h"
 #include "parse_to_image.h"
-#include "print_result.h"
 #include "refresh_screen.h"
 #include "types.h"
+#include "ft_utils.h"
 
 #define MY_KEY_EOT 4
 #define MY_KEY_ESC 27
 
-#include <unistd.h>
-
 static void wait_any_key_input(t_game *g, WINDOW *w)
 {
 	while (true) {
-		refresh_screen2(g, w);
+		refresh_screen(g, w);
 		attrset(0 | A_UNDERLINE | A_BOLD);
 		printw("Press any key to start game !\n");
 		if (getch() == KEY_RESIZE) {
@@ -34,32 +31,8 @@ void print_menu(WINDOW *w)
 {
 	t_game g;
 	init_game(&g, 1, 1, 1);
-	g.current_board.field[0][0].score = 2048;
+	g.current_board.field[0][0].score = WIN_VALUE;
 	wait_any_key_input(&g, w);
-}
-
-void create_colors()
-{
-	int offset = 15;
-	for (int i = 1; i <= 11; i++) {
-		int r = i * (255 / 11);
-		init_color(offset + i, r, 0, 0);
-		init_pair(i, COLOR_WHITE, offset + i);
-		// attrset(COLOR_PAIR(i) | A_BOLD);
-		// printw("[r %d i %d]     0000000000    \n", r, i);
-	}
-}
-
-WINDOW *init_ncurses()
-{
-	WINDOW *w = initscr();
-	timeout(-1);
-	noecho();
-	curs_set(0);
-	keypad(stdscr, TRUE);
-	start_color();
-	create_colors();
-	return w;
 }
 
 static e_slide_direction key_to_direction(int direction_key)
@@ -104,7 +77,7 @@ static int get_keych()
 static bool key_reaction(t_game *g, WINDOW *w)
 {
 	while (true) {
-		refresh_screen(g, w);
+		refresh_screen_with_key_info(g, w);
 		int c = get_keych();
 		switch (c) {
 		case MY_KEY_ESC:
@@ -132,7 +105,7 @@ static bool key_reaction(t_game *g, WINDOW *w)
 
 static int ask_continue(t_game *g, WINDOW *w)
 {
-	refresh_screen2(g, w);
+	refresh_screen(g, w);
 	attrset(0 | A_UNDERLINE | A_BOLD);
 	printw("YOU WIN! continue ? y/n\n");
 	attrset(0 | A_BOLD);
@@ -141,7 +114,7 @@ static int ask_continue(t_game *g, WINDOW *w)
 		flushinp();
 		switch (c) {
 		case KEY_RESIZE:
-			refresh_screen2(g, w);
+			refresh_screen(g, w);
 			attrset(0 | A_UNDERLINE | A_BOLD);
 			printw("YOU WIN! continue ? y/n\n");
 			attrset(0 | A_BOLD);
@@ -161,7 +134,6 @@ static bool winning_reaction(t_game *g, WINDOW *w)
 		return false;
 	}
 	// かち
-	// TODO: 勝った時の処理
 	// ↓続行を選んだ場合はフラグをセットして続行
 	g->has_won = true;
 	return ask_continue(g, w) == 'n';
@@ -174,19 +146,13 @@ static bool losing_reaction(t_game *g, WINDOW *w)
 		return false;
 	}
 	// まけ
-	refresh_screen(g, w);
-	// TODO: 負けた時の処理
+	refresh_screen_with_key_info(g, w);
 	return true;
 }
 
-static void game_loop(t_game *g)
+void game_loop(t_game *g, WINDOW *w)
 {
-	WINDOW *w = init_ncurses();
-	if (w == NULL) {
-		return;
-	}
 	print_menu(w);
-	srand(g->random_seed);
 	spawn_a_block(&g->current_board);
 	while (true) {
 		spawn_a_block(&g->current_board);
@@ -213,43 +179,4 @@ static void game_loop(t_game *g)
 			}
 		}
 	}
-	t_image image = create_result_image(&g->current_board, w);
-	endwin();
-	print_result(&image, g->score);
-}
-
-#include <limits.h>
-#include <unistd.h>
-
-static size_t get_game_height(int argc, char **argv)
-{
-	if (argc < 2) {
-		return 4;
-	}
-	char *s = argv[1];
-	if ('1' <= s[0] && s[0] <= '5' && s[1] == '\0') {
-		return s[0] - '0';
-	}
-	return 4;
-}
-
-static size_t get_game_width(int argc, char **argv)
-{
-	if (argc < 3) {
-		return 4;
-	}
-	char *s = argv[2];
-	if ('1' <= s[0] && s[0] <= '5' && s[1] == '\0') {
-		return s[0] - '0';
-	}
-	return 4;
-}
-
-int main(int argc, char **argv)
-{
-	t_game g;
-	size_t height = get_game_height(argc, argv);
-	size_t width  = get_game_width(argc, argv);
-	init_game(&g, time(NULL), height, width);
-	game_loop(&g);
 }

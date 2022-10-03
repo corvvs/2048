@@ -6,11 +6,11 @@ CXX		:= clang++
 CC		:= cc
 CFLAGS	:= -Wall -Werror -Wextra -MMD -MP
 
-LIBS	= -lncurses
+LIBS	= -lncursesw
 
-SRCDIR	:= .
+SRCDIR	:= srcs
 OBJDIR	:= ./obj
-SRCS	:= $(shell find . -maxdepth 1 -type f -name '*.c')
+SRCS	:= $(shell find $(SRCDIR) -maxdepth 1 -type f -name '*.c')
 OBJS	:= $(SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o)
 DEPENDS	:= $(SRCS:$(SRCDIR)%.c=$(OBJDIR)%.d)
 

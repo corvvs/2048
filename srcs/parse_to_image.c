@@ -32,7 +32,7 @@ static void parse_to_block_image_text(score_type num, t_block_image *img, const 
 	int line_padding_size = size->block_height / 2;
 	int lsb               = get_lsb(num);
 
-	img->color = lsb + 1 % 11;
+	img->color = (lsb + 1) % 11;
 	set_payload(&img->field[line_padding_size], num, size->block_width);
 }
 
@@ -121,7 +121,7 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 	img->color = (lsb + 1) % 11;
 	for (int i = d - 1; 0 <= i; --i, num /= 10) {
 		int          k     = num % 10;
-		const char **griph = digit_griphs[k];
+		const t_aa_char_type **griph = digit_griphs[k];
 		// printw("i = %d, k = %d, griph = %p\n", i, k, griph);
 		for (unsigned int pi = 0; pi < HD; ++pi) {
 			for (unsigned int pj = 0; pj < WD; ++pj) {
@@ -134,7 +134,7 @@ static void parse_to_block_image_aa(score_type num, t_block_image *img, const t_
 				}
 				unsigned int yi    = PU + pi;
 				unsigned int xi    = PL + i * (WD + 1) - 1 + pj;
-				img->field[yi][xi] = '#';
+				img->field[yi][xi] = AA_BLOCK_CHAR;
 			}
 		}
 	}
