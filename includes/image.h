@@ -6,6 +6,8 @@
 #define MAX_BLOCK_IMAGE_SIZE 200
 #define MAX_DISPLAY_SIZE MAX_BLOCK_IMAGE_SIZE *MAX_GAME_SIZE
 
+#define COLOR_VARIATION 6
+
 typedef int t_color_pair_id;
 
 typedef wchar_t           t_block_image_row[MAX_BLOCK_IMAGE_SIZE];
