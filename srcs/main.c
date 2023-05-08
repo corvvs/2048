@@ -28,7 +28,7 @@ static size_t get_game_width(int argc, char **argv)
 		return 4;
 	}
 	char *s = argv[2];
-	if ('1' <= s[0] && s[0] <= '5' && s[1] == '\0') {
+	if ('1' <= s[0] && s[0] <= ('0' + MAX_GAME_SIZE) && s[1] == '\0') {
 		return s[0] - '0';
 	}
 	return 4;
@@ -79,9 +79,9 @@ int main(int argc, char **argv)
 #ifdef BONUS
 	setlocale(LC_ALL, "");
 #endif
-	t_game g;
+	t_game *g = malloc(sizeof(t_game));
 	size_t height = get_game_height(argc, argv);
 	size_t width  = get_game_width(argc, argv);
-	init_game(&g, time(NULL), height, width);
-	run_game(&g);
+	init_game(g, time(NULL), height, width);
+	run_game(g);
 }
